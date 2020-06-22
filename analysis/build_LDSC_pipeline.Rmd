@@ -19,9 +19,6 @@ editor_options:
 2. Disjoint categories and Overlapped categories 
 
 
-
-
-
 ### **Usage Example**
 step1: convert GWAS summary statistics to the LDSC .sumstats format   
  **Note: To improve speed, the option "--chunksize 500000" should be added to munge_sumstats command.**
