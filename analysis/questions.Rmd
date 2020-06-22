@@ -9,8 +9,8 @@ editor_options:
 
 ### **Technical Questions**
 #### *Related to methods*
-1. Why ....
-2. 
+1. On the stratified LDSC paper, they define heritability as $\sum_j\beta_j^2$. This can be derived from standardized phenotype and genotype, right?
+2. When SNPs are partitioned into overlapped categories, can you explain how to estimate heritability of a category?
 
 #### *Related to codings*
 

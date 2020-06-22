@@ -11,9 +11,18 @@ editor_options:
 
 * Big pictures
 
+
+
 * Hypotheses 
 
-* Questions and methods
+
+
+
+* Analysis methods
+1. In our analysis, we have gene expression levels as phenotypes. We should perform S-LDSC for each gene against SNPs that are stratefied into different functional categories.
+2. In your paper, you estimated the enrichment of each functional category, defined as the proportion
+of heritability in that category divided by the proportion of SNPs in that category.
+
 
 ### **Relevant Paper**
 

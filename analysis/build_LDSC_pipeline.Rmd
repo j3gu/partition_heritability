@@ -7,18 +7,29 @@ editor_options:
   chunk_output_type: console
 ---
 
-### **Introduction**
-
-
+### **Introduction to stratified LD score regression**
+- partition heritability from GWAS summary statistics while accounting for linked markers
+- estimate the proportion of genome-wide SNP heritability attributable to functional categories by  explicitly modeling LD and utilizing external annotation info.
+- only requires summary statistics (GWAS or eQTLs) and LD info from an external reference panel with same ancestry
 
 ### **Methods/Theory**
+1. LD to a category that is enriched for heritability (contribute to the heritability more than baseline average) will increase the $\chi^2$ statistics of a SNP more than LD to a category that does not contribute to heritability.
+=> A category of SNPs is enriched for heritability if SNPs with high LD to that category have higher $\chi^2$ statistics than SNPs with low LD to that category. 
+
+2. Disjoint categories and Overlapped categories 
+
+
 
 
 
 ### **Usage Example**
-
-
-
+step1: convert GWAS summary statistics to the LDSC .sumstats format   
+ **Note: To improve speed, the option "--chunksize 500000" should be added to munge_sumstats command.**
+ 
+step2: run S-LDSC on BMI GWAS summary statistics in .sumstats format using annotation files   
+  **When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.**  
+* .results file's title: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors  
+  
 ### **Analysis pipeline**
 
 ```{r}
