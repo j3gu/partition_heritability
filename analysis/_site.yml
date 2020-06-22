@@ -1,7 +1,7 @@
-name: "partition_heritability"
+name: partition_heritability
 output_dir: ../docs
 navbar:
-  title: "partition_heritability"
+  title: partition_heritability
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/j3gu/partition_heritability
 output:
   workflowr::wflow_html:
     toc: yes
