@@ -435,10 +435,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreef4a4f079bf7cff1f63508675ede8ba5d870a7b3etargetblankf4a4f07a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/f4a4f079bf7cff1f63508675ede8ba5d870a7b3e" target="_blank">f4a4f07</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeaa1b811266eedaaabfd221cd9c554985a9713664targetblankaa1b811a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/aa1b811266eedaaabfd221cd9c554985a9713664" target="_blank">aa1b811</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreef4a4f079bf7cff1f63508675ede8ba5d870a7b3etargetblankf4a4f07a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeaa1b811266eedaaabfd221cd9c554985a9713664targetblankaa1b811a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -489,6 +489,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/j3gu/partition_heritability/blob/aa1b811266eedaaabfd221cd9c554985a9713664/analysis/build_LDSC_pipeline.Rmd" target="_blank">aa1b811</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-22
+</td>
+<td>
+publish the initial files
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/j3gu/partition_heritability/315e842d0a92db950a50afab3437ffaa458d983c/docs/build_LDSC_pipeline.html" target="_blank">315e842</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/j3gu/partition_heritability/blob/f4a4f079bf7cff1f63508675ede8ba5d870a7b3e/analysis/build_LDSC_pipeline.Rmd" target="_blank">f4a4f07</a>
 </td>
 <td>
@@ -508,14 +542,28 @@ publish the initial files
 </div>
 </div>
 </div>
-<div id="introduction" class="section level3">
-<h3><strong>Introduction</strong></h3>
+<div id="introduction-to-stratified-ld-score-regression" class="section level3">
+<h3><strong>Introduction to stratified LD score regression</strong></h3>
+<ul>
+<li>partition heritability from GWAS summary statistics while accounting for linked markers</li>
+<li>estimate the proportion of genome-wide SNP heritability attributable to functional categories by explicitly modeling LD and utilizing external annotation info.</li>
+<li>only requires summary statistics (GWAS or eQTLs) and LD info from an external reference panel with same ancestry</li>
+</ul>
 </div>
 <div id="methodstheory" class="section level3">
 <h3><strong>Methods/Theory</strong></h3>
+<ol style="list-style-type: decimal">
+<li><p>LD to a category that is enriched for heritability (contribute to the heritability more than baseline average) will increase the <span class="math inline">\(\chi^2\)</span> statistics of a SNP more than LD to a category that does not contribute to heritability. =&gt; A category of SNPs is enriched for heritability if SNPs with high LD to that category have higher <span class="math inline">\(\chi^2\)</span> statistics than SNPs with low LD to that category.</p></li>
+<li><p>Disjoint categories and Overlapped categories</p></li>
+</ol>
 </div>
 <div id="usage-example" class="section level3">
 <h3><strong>Usage Example</strong></h3>
+<p>step1: convert GWAS summary statistics to the LDSC .sumstats format<br />
+<strong>Note: To improve speed, the option “–chunksize 500000” should be added to munge_sumstats command.</strong></p>
+<p>step2: run S-LDSC on BMI GWAS summary statistics in .sumstats format using annotation files<br />
+<strong>When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.</strong><br />
+* .results file’s title: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors</p>
 </div>
 <div id="analysis-pipeline" class="section level3">
 <h3><strong>Analysis pipeline</strong></h3>
