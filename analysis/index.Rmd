@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Gene expression heritability"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -9,3 +9,20 @@ editor_options:
 ---
 
 Welcome to my research website.
+
+### **Project Goals**
+investigate how local and distal gene expression heritability can vary across genes with different characteristics such as gene lengths, type of genes, number of enhancers that act on the genes, and etc. 
+
+### **Data Availability**
+* A combined RNA-Seq datasets with a total of 31684 blood samples [eQTL Gen Consortium]
+* cis-eQTL and trans-eQTL summary statistics can be downloaded
+
+### **Stratified LDSC**
+* [learn_LDSC](build_LDSC_pipelines.html)
+
+### **Results**
+
+
+### **Questions**
+* [Questions](questions.html)
+* [Research ideas](research_ideas.html)

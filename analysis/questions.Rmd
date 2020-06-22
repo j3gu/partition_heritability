@@ -1,0 +1,26 @@
+---
+title: "Questions"
+author: "Jing Gu"
+date: "2020-06-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+### **Technical Questions**
+#### *Related to methods*
+1. Why ....
+2. 
+
+#### *Related to codings*
+
+
+### **Questions Related to Results**
+
+
+
+
+```{r}
+
+```
+

@@ -1,0 +1,27 @@
+---
+title: "Build LDSC pipeline"
+author: "Jing Gu"
+date: "2020-06-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+### **Introduction**
+
+
+
+### **Methods/Theory**
+
+
+
+### **Usage Example**
+
+
+
+### **Analysis pipeline**
+
+```{r}
+
+```
+

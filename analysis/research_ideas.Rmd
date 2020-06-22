@@ -1,0 +1,26 @@
+---
+title: "Research Ideas"
+author: "Jing Gu"
+date: "2020-06-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+### **Explore Research Ideas**
+
+* Big pictures
+
+* Hypotheses 
+
+* Questions and methods
+
+### **Relevant Paper**
+
+
+
+
+```{r}
+
+```
+
