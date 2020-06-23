@@ -435,10 +435,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeaa1b811266eedaaabfd221cd9c554985a9713664targetblankaa1b811a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/aa1b811266eedaaabfd221cd9c554985a9713664" target="_blank">aa1b811</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree5743b3be5d7076466d6bb21a9ae45dd692de64c2targetblank5743b3ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/5743b3be5d7076466d6bb21a9ae45dd692de64c2" target="_blank">5743b3b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeaa1b811266eedaaabfd221cd9c554985a9713664targetblankaa1b811a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree5743b3be5d7076466d6bb21a9ae45dd692de64c2targetblank5743b3ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -484,6 +484,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/5743b3be5d7076466d6bb21a9ae45dd692de64c2/analysis/research_ideas.Rmd" target="_blank">5743b3b</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-22
+</td>
+<td>
+updates from weekly meeting
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/j3gu/partition_heritability/7caa68d0a267ba7057576fd31383289e6e0a2d2a/docs/research_ideas.html" target="_blank">7caa68d</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -547,11 +581,22 @@ publish the initial files
 <ul>
 <li><p>Big pictures</p></li>
 <li><p>Hypotheses</p></li>
-<li>Analysis methods</li>
+<li>Analysis methods -06/22-</li>
 </ul>
 <ol style="list-style-type: decimal">
-<li>In our analysis, we have gene expression levels as phenotypes. We should perform S-LDSC for each gene against SNPs that are stratefied into different functional categories.</li>
-<li>In your paper, you estimated the enrichment of each functional category, defined as the proportion of heritability in that category divided by the proportion of SNPs in that category.</li>
+<li>Using gene expression levels as phenotypes, we will perform S-LDSC regression separately for cis-eQTLs and trans-eQTLs.</li>
+<li>The window size in cis regions is defined as SNPs that are located 1MB away from TSS and for trans as SNPs in different chromosomes.</li>
+<li></li>
+</ol>
+<ul>
+<li>Future Directions</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>The issue of mappability may not be considered for the trans eQTL analysis done by the eQTL consortium. We may check if there are spurious signals for trans-eQTLs and if yes we need to correct them before downstream analysis.</li>
+</ol>
+<p>Issue of mappability:</p>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
 </ol>
 </div>
 <div id="relevant-paper" class="section level3">
