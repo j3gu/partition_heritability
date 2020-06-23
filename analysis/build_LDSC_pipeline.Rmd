@@ -18,6 +18,8 @@ editor_options:
 
 2. Disjoint categories and Overlapped categories 
 
+3. 
+
 
 ### **Usage Example**
 step1: convert GWAS summary statistics to the LDSC .sumstats format   

@@ -13,16 +13,25 @@ editor_options:
 
 
 
+
 * Hypotheses 
 
 
 
 
 * Analysis methods
-1. In our analysis, we have gene expression levels as phenotypes. We should perform S-LDSC for each gene against SNPs that are stratefied into different functional categories.
-2. In your paper, you estimated the enrichment of each functional category, defined as the proportion
-of heritability in that category divided by the proportion of SNPs in that category.
+-06/22-
+1. Using gene expression levels as phenotypes, we will perform S-LDSC regression separately for cis-eQTLs and trans-eQTLs.
+2. The window size in cis regions is defined as SNPs that are located 1MB away from TSS and for trans as SNPs in different chromosomes. 
+3. 
 
+
+* Future Directions
+1. The issue of mappability may not be considered for the trans eQTL analysis done by the eQTL consortium. We may check if there are spurious signals for trans-eQTLs and if yes we need to correct them before downstream analysis.
+
+Issue of mappability:
+  
+2. 
 
 ### **Relevant Paper**
 
