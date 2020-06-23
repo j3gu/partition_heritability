@@ -18,7 +18,7 @@ investigate how local and distal gene expression heritability can vary across ge
 * cis-eQTL and trans-eQTL summary statistics can be downloaded
 
 ### **Stratified LDSC**
-* [learn_LDSC](build_LDSC_pipelines.html)
+* [learn_LDSC](build_LDSC_pipeline.html)
 
 ### **Results**
 
