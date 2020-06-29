@@ -11,9 +11,31 @@ editor_options:
 #### *Related to methods*
 1. On the stratified LDSC paper, they define heritability as $\sum_j\beta_j^2$. This can be derived from standardized phenotype and genotype, right?
 2. When SNPs are partitioned into overlapped categories, can you explain how to estimate heritability of a category?
+3. How to derive the variance $\beta_j$ to be $\frac{\sigma_g^2}{M}$?
 
 #### *Related to codings*
-
+1. I have run LDSC on one gene CLEC12A using one core and 16 GB memory per core.\\  
+Step1: converting files into sumstats. 
+  - time: 19s  
+  - Output: 410 local SNPs (7469 SNPs not in HapMap3)   
+  
+Step2: partition heritability:\\
+  - time: 4min30s
+  - Output: --print coefficients option can give per SNP heritability in each category
+            Without this option, it still took around 4min to run this step.
+            Most time was spent on loading all the annotation matrices.
+```{r,eval=FALSE}
+python ~/github/ldsc/ldsc.py \
+    --h2 CLEC12A_ldsc.sumstats.gz \
+    --ref-ld-chr baseline. \
+    --w-ld-chr weights_hm3_no_hla/weights. \
+    --overlap-annot \
+    --frqfile-chr 1000G_frq/1000G.mac5eur. \
+    --print-coefficients \
+    --out CLEC12A_nocoeff
+```
+      
+Did you generate your own annotation and LD scores for SNPs only in the local or distal regions? Would it be faster if I remove SNPs that are outside of the window size in the annotation file?
 
 ### **Questions Related to Results**
 

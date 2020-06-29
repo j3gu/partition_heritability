@@ -13,12 +13,78 @@ editor_options:
 - only requires summary statistics (GWAS or eQTLs) and LD info from an external reference panel with same ancestry
 
 ### **Methods/Theory**
+Start from a simple linear model,
+    $$y_i = \sum_{j}^{M}X_{ij}\beta_j + \epsilon_i$$
+where $y_i$ is a standardized quantitative phenotype (eg. gene expression levels),  M denotes number of SNPs, $X_ij$ is a standardized genotype of individual i at SNP j, $\beta_j$ is the effect size of SNP j and $\epsilon_i$ is mean-zero noise. 
+
+As $\rm E[Y|X] = X\beta = 0$ and $X \ne 0$, $\beta_j$ is a random variable with a normal distribution as $\beta_j \sim N(0, \sigma_{\gamma}^2)$. Thus, $\beta$ is a mean-zero random vector with independent entries.
+
+#### **Marginal genetic variance vs. per SNP genetic variance**  
+*Marginal genetic variance* \\
+We can write the variance of Y as $\rm Var(Y) = Var(X\beta) + \sigma_{\epsilon}^2$. Variance explained by X is known as genetic variance and given by:
+$$
+\begin{aligned}
+\rm Var(X\beta) &= \beta^2 \rm Var(X) & {\beta}\text{ is fixed}
+\end{aligned}
+$$
+Total variance explained by all the SNPs:
+$$
+\begin{aligned}
+\sigma_g^2 &= \rm Var(\sum_{j=1}^{M}X_j\beta_j) \\
+           &= \sum_{j=1}^M \beta_{j}^2 \rm Var(X_j)  & \text{X's are independent} \\
+           &= \sum_{j=1}^M \beta_{j}^2
+\end{aligned}
+$$
+Then heritability can be written as sum of $\beta_j^2$.  
+$$h^2 = \frac{\sigma_g^2}{\sigma^2} = \sum_{j}\beta_{j}^2$$
+We use $E[\beta_j^2]*M$ to approximate sum of $\beta_j^2$, so we will get 
+$$
+\begin{aligned}
+\sigma_g^2 &= \sum_{j}\beta_{j}^2 \\
+          &\approx \rm E[\beta_j^2]*M \\
+          &= (\rm Var(\hat \beta_j) + (E[\beta_j])^2)*M & \text{as }E[\beta_j] =0 \\
+          &= \rm Var(\hat \beta_j) * M
+\end{aligned}
+$$
+To estimate $\beta_j$, we mimimize least square errors and obtain the expectation and variance of $\hat \beta$ to be as following:
+$$
+\begin{aligned}
+E[\hat \beta] &= \beta = 0\\
+\rm Var(\hat \beta) &= \rm Var((X^TX)^{-1}X^Ty) \\
+                    &= (X^TX)^{-1}X^T\rm Var(y)((X^TX)^{-1}X^T)^T \\
+                    &= (X^TX)^{-1}\sigma^2 \\
+                    &= (X^TX)^{-1}
+\end{aligned}
+$$
+Question: How to derive the variance $beta_j$ to be $\frac{\sigma_g^2}{M}$?  
+Thus, each SNP explains on average $\frac{\sigma_g^2}{M}$ amount of variance.  
+
+*per-SNP heritability at SNP j*
+$$\rm Var(\beta_j) = \sum_{c:j\in C_c} \tau_c$$
+where $\tau_c = h^2(C_c)/M(C_c)$ is per SNP heritability for category Cc.   
+
+  * Disjoint categories:
+
+$$
+\rm \hat {Var(\beta_j)} = \hat \tau_c
+$$
+
+  * Overlapped categories:
+
+$$
+\rm \hat {Var(\beta_j)} = \sum_{c:j\in C_c} \hat \tau_c
+$$
+
+#### **Model for stratefied LD score regression**
+$$
+E[\chi_j^2] = N\sum_c \tau_cl(j,c) + Na + 1
+$$
+
 1. LD to a category that is enriched for heritability (contribute to the heritability more than baseline average) will increase the $\chi^2$ statistics of a SNP more than LD to a category that does not contribute to heritability.
 => A category of SNPs is enriched for heritability if SNPs with high LD to that category have higher $\chi^2$ statistics than SNPs with low LD to that category. 
 
-2. Disjoint categories and Overlapped categories 
+2. Disjoint categories vs. Overlapped categories 
 
-3. 
 
 
 ### **Usage Example**
@@ -26,8 +92,8 @@ step1: convert GWAS summary statistics to the LDSC .sumstats format
  **Note: To improve speed, the option "--chunksize 500000" should be added to munge_sumstats command.**
  
 step2: run S-LDSC on BMI GWAS summary statistics in .sumstats format using annotation files   
-  **When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.**  
-* .results file's title: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors  
+**Note: When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.**  
+- The title for .results file is Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors.  
   
 ### **Analysis pipeline**
 
