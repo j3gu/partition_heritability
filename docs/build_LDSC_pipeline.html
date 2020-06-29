@@ -344,7 +344,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-22
+<strong>Last updated:</strong> 2020-06-29
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -435,17 +435,21 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree5743b3be5d7076466d6bb21a9ae45dd692de64c2targetblank5743b3ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/5743b3be5d7076466d6bb21a9ae45dd692de64c2" target="_blank">5743b3b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeb9fb0c0a7b47c46f3578787bd263a8777a26877ftargetblankb9fb0c0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/b9fb0c0a7b47c46f3578787bd263a8777a26877f" target="_blank">b9fb0c0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree5743b3be5d7076466d6bb21a9ae45dd692de64c2targetblank5743b3ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytreeb9fb0c0a7b47c46f3578787bd263a8777a26877ftargetblankb9fb0c0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
+Ignored files:
+    Ignored:    .ipynb_checkpoints/
+
 Untracked files:
     Untracked:  README.html
+    Untracked:  analysis/.ipynb_checkpoints/
 
 </code></pre>
 <p>
@@ -484,6 +488,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/b9fb0c0a7b47c46f3578787bd263a8777a26877f/analysis/build_LDSC_pipeline.Rmd" target="_blank">b9fb0c0</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-29
+</td>
+<td>
+wflow_publish(“analysis/*“)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/j3gu/partition_heritability/237030604f8c20bfd3ce19ee7b2b77b69a1fd93e/docs/build_LDSC_pipeline.html" target="_blank">2370306</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-06-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -620,19 +658,70 @@ publish the initial files
 </div>
 <div id="methodstheory" class="section level3">
 <h3><strong>Methods/Theory</strong></h3>
+<p>Start from a simple linear model, <span class="math display">\[y_i = \sum_{j}^{M}X_{ij}\beta_j + \epsilon_i\]</span> where <span class="math inline">\(y_i\)</span> is a standardized quantitative phenotype (eg. gene expression levels), M denotes number of SNPs, <span class="math inline">\(X_ij\)</span> is a standardized genotype of individual i at SNP j, <span class="math inline">\(\beta_j\)</span> is the effect size of SNP j and <span class="math inline">\(\epsilon_i\)</span> is mean-zero noise.</p>
+<p>As <span class="math inline">\(\rm E[Y|X] = X\beta = 0\)</span> and <span class="math inline">\(X \ne 0\)</span>, <span class="math inline">\(\beta_j\)</span> is a random variable with a normal distribution as <span class="math inline">\(\beta_j \sim N(0, \sigma_{\gamma}^2)\)</span>. Thus, <span class="math inline">\(\beta\)</span> is a mean-zero random vector with independent entries.</p>
+<div id="marginal-genetic-variance-vs.per-snp-genetic-variance" class="section level4">
+<h4><strong>Marginal genetic variance vs. per SNP genetic variance</strong></h4>
+<p><em>Marginal genetic variance</em> \ We can write the variance of Y as <span class="math inline">\(\rm Var(Y) = Var(X\beta) + \sigma_{\epsilon}^2\)</span>. Variance explained by X is known as genetic variance and given by: <span class="math display">\[
+\begin{aligned}
+\rm Var(X\beta) &amp;= \beta^2 \rm Var(X) &amp; {\beta}\text{ is fixed}
+\end{aligned}
+\]</span> Total variance explained by all the SNPs: <span class="math display">\[
+\begin{aligned}
+\sigma_g^2 &amp;= \rm Var(\sum_{j=1}^{M}X_j\beta_j) \\
+           &amp;= \sum_{j=1}^M \beta_{j}^2 \rm Var(X_j)  &amp; \text{X&#39;s are independent} \\
+           &amp;= \sum_{j=1}^M \beta_{j}^2
+\end{aligned}
+\]</span> Then heritability can be written as sum of <span class="math inline">\(\beta_j^2\)</span>.<br />
+<span class="math display">\[h^2 = \frac{\sigma_g^2}{\sigma^2} = \sum_{j}\beta_{j}^2\]</span> We use <span class="math inline">\(E[\beta_j^2]*M\)</span> to approximate sum of <span class="math inline">\(\beta_j^2\)</span>, so we will get <span class="math display">\[
+\begin{aligned}
+\sigma_g^2 &amp;= \sum_{j}\beta_{j}^2 \\
+          &amp;\approx \rm E[\beta_j^2]*M \\
+          &amp;= (\rm Var(\hat \beta_j) + (E[\beta_j])^2)*M &amp; \text{as }E[\beta_j] =0 \\
+          &amp;= \rm Var(\hat \beta_j) * M
+\end{aligned}
+\]</span> To estimate <span class="math inline">\(\beta_j\)</span>, we mimimize least square errors and obtain the expectation and variance of <span class="math inline">\(\hat \beta\)</span> to be as following: <span class="math display">\[
+\begin{aligned}
+E[\hat \beta] &amp;= \beta = 0\\
+\rm Var(\hat \beta) &amp;= \rm Var((X^TX)^{-1}X^Ty) \\
+                    &amp;= (X^TX)^{-1}X^T\rm Var(y)((X^TX)^{-1}X^T)^T \\
+                    &amp;= (X^TX)^{-1}\sigma^2 \\
+                    &amp;= (X^TX)^{-1}
+\end{aligned}
+\]</span> Question: How to derive the variance <span class="math inline">\(beta_j\)</span> to be <span class="math inline">\(\frac{\sigma_g^2}{M}\)</span>?<br />
+Thus, each SNP explains on average <span class="math inline">\(\frac{\sigma_g^2}{M}\)</span> amount of variance.</p>
+<p><em>per-SNP heritability at SNP j</em> <span class="math display">\[\rm Var(\beta_j) = \sum_{c:j\in C_c} \tau_c\]</span> where <span class="math inline">\(\tau_c = h^2(C_c)/M(C_c)\)</span> is per SNP heritability for category Cc.</p>
+<ul>
+<li>Disjoint categories:</li>
+</ul>
+<p><span class="math display">\[
+\rm \hat {Var(\beta_j)} = \hat \tau_c
+\]</span></p>
+<ul>
+<li>Overlapped categories:</li>
+</ul>
+<p><span class="math display">\[
+\rm \hat {Var(\beta_j)} = \sum_{c:j\in C_c} \hat \tau_c
+\]</span></p>
+</div>
+<div id="model-for-stratefied-ld-score-regression" class="section level4">
+<h4><strong>Model for stratefied LD score regression</strong></h4>
+<p><span class="math display">\[
+E[\chi_j^2] = N\sum_c \tau_cl(j,c) + Na + 1
+\]</span></p>
 <ol style="list-style-type: decimal">
 <li><p>LD to a category that is enriched for heritability (contribute to the heritability more than baseline average) will increase the <span class="math inline">\(\chi^2\)</span> statistics of a SNP more than LD to a category that does not contribute to heritability. =&gt; A category of SNPs is enriched for heritability if SNPs with high LD to that category have higher <span class="math inline">\(\chi^2\)</span> statistics than SNPs with low LD to that category.</p></li>
-<li><p>Disjoint categories and Overlapped categories</p></li>
-<li></li>
+<li><p>Disjoint categories vs. Overlapped categories</p></li>
 </ol>
+</div>
 </div>
 <div id="usage-example" class="section level3">
 <h3><strong>Usage Example</strong></h3>
 <p>step1: convert GWAS summary statistics to the LDSC .sumstats format<br />
 <strong>Note: To improve speed, the option “–chunksize 500000” should be added to munge_sumstats command.</strong></p>
 <p>step2: run S-LDSC on BMI GWAS summary statistics in .sumstats format using annotation files<br />
-<strong>When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.</strong><br />
-* .results file’s title: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors</p>
+<strong>Note: When multiple annotation files are given as inputs, make sure not to introduce any co-linearity.</strong><br />
+- The title for .results file is Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors.</p>
 </div>
 <div id="analysis-pipeline" class="section level3">
 <h3><strong>Analysis pipeline</strong></h3>

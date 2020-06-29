@@ -9,11 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Jing Gu" />
 
-<meta name="date" content="2020-06-22" />
 
-<title>Questions</title>
+<title>About</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,9 +19,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -174,101 +169,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -317,9 +217,7 @@ div.section {
 
 
 
-<h1 class="title toc-ignore">Questions</h1>
-<h4 class="author"><em>Jing Gu</em></h4>
-<h4 class="date"><em>2020-06-22</em></h4>
+<h1 class="title toc-ignore">About</h1>
 
 </div>
 
@@ -347,7 +245,7 @@ div.section {
 <strong>Last updated:</strong> 2020-06-29
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>partition_heritability/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -369,66 +267,6 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
 <p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
-</p>
-</div>
-<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200622code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200622)</code> </a>
-</p>
-</div>
-<div id="strongSeedstrongcodesetseed20200622code" class="panel-collapse collapse">
-<div class="panel-body">
-<p>The command <code>set.seed(20200622)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
-</p>
-</div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
-</p>
-</div>
-<div id="strongCachestrongnone" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
-</p>
-</div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -493,24 +331,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/j3gu/partition_heritability/blob/b9fb0c0a7b47c46f3578787bd263a8777a26877f/analysis/questions.Rmd" target="_blank">b9fb0c0</a>
-</td>
-<td>
-Jing Gu
-</td>
-<td>
-2020-06-29
-</td>
-<td>
-wflow_publish(“analysis/*“)
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/j3gu/partition_heritability/7caa68d0a267ba7057576fd31383289e6e0a2d2a/docs/questions.html" target="_blank">7caa68d</a>
+<a href="https://github.com/j3gu/partition_heritability/blob/3e1108447e3fe3613b208c86dc01c800a7703b1b/analysis/about.Rmd" target="_blank">3e11084</a>
 </td>
 <td>
 Jing Gu
@@ -519,58 +340,7 @@ Jing Gu
 2020-06-22
 </td>
 <td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/j3gu/partition_heritability/blob/aa1b811266eedaaabfd221cd9c554985a9713664/analysis/questions.Rmd" target="_blank">aa1b811</a>
-</td>
-<td>
-Jing Gu
-</td>
-<td>
-2020-06-22
-</td>
-<td>
-publish the initial files
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/j3gu/partition_heritability/315e842d0a92db950a50afab3437ffaa458d983c/docs/questions.html" target="_blank">315e842</a>
-</td>
-<td>
-Jing Gu
-</td>
-<td>
-2020-06-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/j3gu/partition_heritability/blob/f4a4f079bf7cff1f63508675ede8ba5d870a7b3e/analysis/questions.Rmd" target="_blank">f4a4f07</a>
-</td>
-<td>
-Jing Gu
-</td>
-<td>
-2020-06-22
-</td>
-<td>
-publish the initial files
+Start workflowr project.
 </td>
 </tr>
 </tbody>
@@ -580,76 +350,7 @@ publish the initial files
 </div>
 </div>
 </div>
-<div id="technical-questions" class="section level3">
-<h3><strong>Technical Questions</strong></h3>
-<div id="related-to-methods" class="section level4">
-<h4><em>Related to methods</em></h4>
-<ol style="list-style-type: decimal">
-<li>On the stratified LDSC paper, they define heritability as <span class="math inline">\(\sum_j\beta_j^2\)</span>. This can be derived from standardized phenotype and genotype, right?</li>
-<li>When SNPs are partitioned into overlapped categories, can you explain how to estimate heritability of a category?</li>
-<li>How to derive the variance <span class="math inline">\(\beta_j\)</span> to be <span class="math inline">\(\frac{\sigma_g^2}{M}\)</span>?</li>
-</ol>
-</div>
-<div id="related-to-codings" class="section level4">
-<h4><em>Related to codings</em></h4>
-<ol style="list-style-type: decimal">
-<li>I have run LDSC on one gene CLEC12A using one core and 16 GB memory per core.\<br />
-Step1: converting files into sumstats.</li>
-</ol>
-<ul>
-<li>time: 19s<br />
-</li>
-<li>Output: 410 local SNPs (7469 SNPs not in HapMap3)</li>
-</ul>
-<p>Step2: partition heritability:\ - time: 4min30s - Output: –print coefficients option can give per SNP heritability in each category Without this option, it still took around 4min to run this step. Most time was spent on loading all the annotation matrices.</p>
-<pre class="r"><code>python ~/github/ldsc/ldsc.py \
-    --h2 CLEC12A_ldsc.sumstats.gz \
-    --ref-ld-chr baseline. \
-    --w-ld-chr weights_hm3_no_hla/weights. \
-    --overlap-annot \
-    --frqfile-chr 1000G_frq/1000G.mac5eur. \
-    --print-coefficients \
-    --out CLEC12A_nocoeff</code></pre>
-<p>Did you generate your own annotation and LD scores for SNPs only in the local or distal regions? Would it be faster if I remove SNPs that are outside of the window size in the annotation file?</p>
-</div>
-</div>
-<div id="questions-related-to-results" class="section level3">
-<h3><strong>Questions Related to Results</strong></h3>
-<br>
-<p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
-</button>
-</p>
-<div id="workflowr-sessioninfo" class="collapse">
-<pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.5.1 (2018-07-02)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Scientific Linux 7.4 (Nitrogen)
-
-Matrix products: default
-BLAS/LAPACK: /software/openblas-0.2.19-el7-x86_64/lib/libopenblas_haswellp-r0.2.19.so
-
-locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] workflowr_1.6.0 Rcpp_1.0.4.6    digest_0.6.18   later_0.7.5    
- [5] rprojroot_1.3-2 R6_2.3.0        backports_1.1.2 git2r_0.26.1   
- [9] magrittr_1.5    evaluate_0.12   stringi_1.2.4   fs_1.3.1       
-[13] promises_1.0.1  whisker_0.3-2   rmarkdown_1.10  tools_3.5.1    
-[17] stringr_1.3.1   glue_1.3.0      httpuv_1.4.5    yaml_2.2.0     
-[21] compiler_3.5.1  htmltools_0.3.6 knitr_1.20     </code></pre>
-</div>
-</div>
+<p>Describe your project.</p>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
@@ -665,8 +366,6 @@ footer is added to webpages before the MathJax javascript. -->
 </script>
 
 
-</div>
-</div>
 
 </div>
 
