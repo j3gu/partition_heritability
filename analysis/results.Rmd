@@ -1,0 +1,71 @@
+---
+title: "results"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+get_columns<-function(colname){
+  cols<-lapply(gene_list$V1, function(i){
+      f<-read.table(paste0(output_dir, i), header = T)
+      return(f[, colname])
+  })
+  output<-do.call(cbind, cols)
+  return(data.frame(f$Category, output))
+}
+```
+
+```{r}
+#count number of reference SNPs in Category C
+annotations<-read.table("/project2/xuanyao/jing/reference/baseline/baseline.21.annot.gz", header = T)
+counts<-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))
+```
+
+### summarize results across genes
+#### Chromosome 21
+```{r echo = FALSE}
+output_dir<-"/home/jinggu/scratch-midway2/projects/gene_heritability/chr21/output/"
+gene_list<-read.table(paste0(output_dir, "all_genes.txt"), header = F)
+f<-read.table(paste0(output_dir, "N6AMT1_local_SNPs.results"), header = T)
+```
+* average per SNP heritability for category Cc across all genes 
+```{r}
+tau<-get_columns("Coefficient")
+avg_tau<-apply(tau[, -1], 1, sum)
+hist(avg_tau, main = "Average Tau_C across all genes")
+```
+* total Heritability estimates
+```{r}
+total_h2<-sum(counts*avg_tau)
+counts*avg_tau
+total_h2
+```
+#### Chromosome 22
+```{r echo = FALSE}
+output_dir<-"/home/jinggu/scratch-midway2/projects/gene_heritability/chr22/output/"
+gene_list<-read.table(paste0(output_dir, "all_genes.txt"), header = F)
+f<-read.table(paste0(output_dir, "ZNF280B_local_SNPs.results"), header = T)
+```
+
+```{r}
+#count number of reference SNPs in Category C
+annotations<-read.table("/project2/xuanyao/jing/reference/baseline/baseline.22.annot.gz", header = T)
+counts<-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))
+```
+* average per SNP heritability for category Cc across all genes 
+```{r}
+tau<-get_columns("Coefficient")
+avg_tau<-apply(tau[, -1], 1, sum)
+hist(avg_tau, main = "Average Tau_C across all genes")
+```
+* total Heritability estimates
+```{r}
+total_h2<-sum(counts*avg_tau)
+counts*avg_tau
+total_h2
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

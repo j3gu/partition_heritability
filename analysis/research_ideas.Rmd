@@ -10,7 +10,8 @@ editor_options:
 ### **Explore Research Ideas**
 
 * Big pictures
-
+super enhancers: Vahedi et al.[ref 39]
+                  Hnisz et al.[ref 36] H3K27ac
 
 
 
@@ -30,7 +31,6 @@ editor_options:
 1. The issue of mappability may not be considered for the trans eQTL analysis done by the eQTL consortium. We may check if there are spurious signals for trans-eQTLs and if yes we need to correct them before downstream analysis.
 
 Issue of mappability:
-  
 2. 
 
 ### **Relevant Paper**

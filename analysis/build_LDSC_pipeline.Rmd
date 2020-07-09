@@ -42,10 +42,13 @@ $$
 \begin{aligned}
 \sigma_g^2 &= \sum_{j}\beta_{j}^2 \\
           &\approx \rm E[\beta_j^2]*M \\
-          &= (\rm Var(\hat \beta_j) + (E[\beta_j])^2)*M & \text{as }E[\beta_j] =0 \\
-          &= \rm Var(\hat \beta_j) * M
+          &= (\rm Var(\beta_j) + (E[\beta_j])^2)*M & \text{as }E[\beta_j] =0 \\
+          &= \rm Var(\beta_j) * M
 \end{aligned}
 $$
+Thus, $\rm Var(\beta_j) = \frac{\sigma^2_g}{M}$, which means each SNP explains on average $\frac{\sigma_g^2}{M}$ amount of variance. 
+
+
 To estimate $\beta_j$, we mimimize least square errors and obtain the expectation and variance of $\hat \beta$ to be as following:
 $$
 \begin{aligned}
@@ -57,7 +60,7 @@ E[\hat \beta] &= \beta = 0\\
 \end{aligned}
 $$
 Question: How to derive the variance $beta_j$ to be $\frac{\sigma_g^2}{M}$?  
-Thus, each SNP explains on average $\frac{\sigma_g^2}{M}$ amount of variance.  
+ 
 
 *per-SNP heritability at SNP j*
 $$\rm Var(\beta_j) = \sum_{c:j\in C_c} \tau_c$$
