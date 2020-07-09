@@ -21,7 +21,7 @@ investigate how local and distal gene expression heritability can vary across ge
 * [learn_LDSC](build_LDSC_pipeline.html)
 
 ### **Results**
-
+* [results](results.html)
 
 ### **Questions**
 * [Questions](questions.html)
