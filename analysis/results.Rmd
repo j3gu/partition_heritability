@@ -5,7 +5,124 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+ref_dir<-"/project2/xuanyao/jing/data/eQTLGen"
+library(ggplot2)
 ```
+
+```{r, echo = F}
+setwd("~/scratch-midway2/projects/gene_heritability")
+chr21_all<-read.table("chr21/output/total_h2_for_each_gene_chr21.txt", header = F,
+                  stringsAsFactors = F)
+chr22_all<-read.table("chr22/output/total_h2_for_each_gene_chr22.txt", header = F,
+                  stringsAsFactors = F)
+header<-c("gene", "total_h2", "std")
+colnames(chr21_all)<-header
+colnames(chr22_all)<-header
+
+chr21_all[,"sign"]<-chr21_all$total_h2 > 0
+chr22_all[,"sign"]<-chr22_all$total_h2 > 0
+
+#filter out genes with negative heritability 
+negative_h2_percent_chr21<-sum(chr21_all[,2] < 0)/dim(chr21_all)[1]
+negative_h2_percent_chr22<-sum(chr22_all[,2] < 0)/dim(chr22_all)[1]
+
+chr21_out<-chr21_all[chr21_all[, 2]<=0, ]
+chr22_out<-chr22_all[chr22_all[, 2]<=0, ]
+
+chr21<-chr21_all[chr21_all[, 2] >0, ]
+chr22<-chr22_all[chr22_all[, 2] >0, ]
+
+print(paste0(100*round(negative_h2_percent_chr21 ,3), "% of genes from chr21 show non-postive heritability."))
+print(paste0(100*round(negative_h2_percent_chr22 ,3), "% of genes from chr22 show non-postive heritability."))
+
+ggplot(chr21_all, aes(x=std, fill=sign)) + geom_histogram(alpha = 0.5) + 
+  ggtitle("Chr21: Histogram of standard deviations for estimated h2") + 
+  scale_fill_discrete(name="Signs for h2",
+                         breaks=c("TRUE", "FALSE"),
+                         labels=c("POSTIVE", "NON-POSTIVE"))
+ggplot(chr22_all, aes(x=std, fill=sign)) + geom_histogram(alpha = 0.5) + 
+  ggtitle("Chr22: Histogram of standard deviations for estimated h2") + 
+  scale_fill_discrete(name="Signs for h2",
+                         breaks=c("TRUE", "FALSE"),
+                         labels=c("POSTIVE", "NON-POSTIVE"))
+
+```
+### Correlation between cis-SNPs' heritatblities with gene characteristics   
+1. gene length (overall)  
+```{r}
+gene_info<-read.table(paste0(ref_dir, "/gene_coordinates_info.txt"), 
+                      header = T, stringsAsFactors = F)
+gene_info[, "length"]<-gene_info$end - gene_info$start
+chr21_index<-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
+chr22_index<-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+par(mfrow = c(1, 2))
+plot(gene_info[chr21_index, "length"], chr21$total_h2, xlab = "gene length", ylab = "total h2",
+     main = "Chr21: heritabiltiy vs.gene length")
+plot(gene_info[chr22_index, "length"], chr22$total_h2, xlab = "gene length", ylab = "total h2",
+     main = "Chr22: heritability vs. gene length")
+cor(gene_info[chr21_index, "length"], chr21$total_h2)
+cor(gene_info[chr22_index, "length"], chr22$total_h2)
+```
+2. gene length by bins   
+Note:  
+  * genes with very high cis-heritability (>200) are excluded in the boxplots  
+  * equal number of genes in each bin  
+```{r}
+chr21_cp<-chr21
+chr22_cp<-chr22
+#remove two data points that have extremely large h2 values
+chr21<-chr21[chr21$total_h2<200,]
+chr22<-chr22[chr22$total_h2<200,]
+chr21_index<-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
+chr22_index<-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+
+chr21[, "bin"]<-cut_number(gene_info[chr21_index, "length"], n = 10)
+chr22[, "bin"]<-cut_number(gene_info[chr22_index, "length"], n = 10)
+
+ggplot(chr21, aes(x=bin, y=total_h2) ) +
+    geom_boxplot(fill="#69b3a2") +
+    xlab("Gene length by bins") + 
+    theme(axis.text.x = element_text(angle = 90)) +
+    ggtitle("Chromosome 21")
+
+ggplot(chr22, aes(x=bin, y=total_h2) ) +
+    geom_boxplot(fill="#69b3a2") +
+    xlab("Gene length by bins") + 
+    theme(axis.text.x = element_text(angle = 90)) + 
+    ggtitle("Chromosome 22")
+```
+3. Convervation scores and number of enhancers  
+```{r echo = FALSE}
+get_reference<-function(genes, type){
+  return(lapply(genes, function(i){
+    gene_id <-gene_info[gene_info$gene_name == i, "gene_id"]
+    ref[ref$GeneSymbol == gene_id, type]
+  }))
+}
+
+ref<-read.csv(paste0(ref_dir, "/1-s2.0-S0002929720300124-mmc2.csv"),
+              header = T, stringsAsFactors = F)
+chr21[,"gene_id"]<-unlist(lapply(chr21$gene, function(i){return(gene_info[which(gene_info$gene_name == i), "gene_id"])}))
+chr22[,"gene_id"]<-unlist(lapply(chr22$gene, function(i){return(gene_info[which(gene_info$gene_name == i), "gene_id"])}))
+
+chr21_subset<-chr21[chr21$gene_id%in%ref$GeneSymbol,]
+chr21_pLI<-lapply(chr21_subset$gene_id, function(i){ref[ref$GeneSymbol == i, "pLI"]})
+chr21_pLI[sapply(chr21_pLI, is.null)] <- NA
+chr21_subset[, "pLI"]<-unlist(chr21_pLI)
+
+chr22_subset<-chr22[chr22$gene_id%in%ref$GeneSymbol,]
+chr22_pLI<-lapply(chr22_subset$gene_id, function(i){ref[ref$GeneSymbol == i, "pLI"]})
+chr22_pLI[sapply(chr22_pLI, is.null)] <- NA
+chr22_subset[, "pLI"]<-unlist(chr22_pLI)
+
+par(mfrow = c(1,2))
+plot(chr21_subset$total_h2, chr21_subset$pLI, main = "Chromosome 21",
+     xlab = "pLI scores", ylab = "total h2")
+plot(chr22_subset$total_h2, chr22_subset$pLI, main = "Chromosome 22",
+     xlab = "pLI scores", ylab = "total h2")
+
+```
+
 
 ```{r}
 get_columns<-function(colname){
@@ -33,14 +150,14 @@ f<-read.table(paste0(output_dir, "N6AMT1_local_SNPs.results"), header = T)
 ```
 * average per SNP heritability for category Cc across all genes 
 ```{r}
-tau<-get_columns("Coefficient")
-avg_tau<-apply(tau[, -1], 1, sum)
-hist(avg_tau, main = "Average Tau_C across all genes")
+chr21_tau<-get_columns("Coefficient")
+chr21_avg_tau<-apply(chr21_tau[, -1], 1, sum)
+hist(chr21_avg_tau, main = "Average Tau_C across all genes")
+names(chr21_avg_tau)<-chr21_tau$f.Category
 ```
 * total Heritability estimates
 ```{r}
-total_h2<-sum(counts*avg_tau)
-counts*avg_tau
+total_h2<-sum(counts*chr21_avg_tau)
 total_h2
 ```
 #### Chromosome 22
@@ -57,14 +174,15 @@ counts<-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))
 ```
 * average per SNP heritability for category Cc across all genes 
 ```{r}
-tau<-get_columns("Coefficient")
-avg_tau<-apply(tau[, -1], 1, sum)
-hist(avg_tau, main = "Average Tau_C across all genes")
+chr22_tau<-get_columns("Coefficient")
+chr22_avg_tau<-apply(chr22_tau[, -1], 1, sum)
+hist(chr22_avg_tau, main = "Average Tau_C across all genes")
+names(chr22_avg_tau)<-chr22_tau$f.Category
+head(chr22_avg_tau)
 ```
 * total Heritability estimates
 ```{r}
-total_h2<-sum(counts*avg_tau)
-counts*avg_tau
+total_h2<-sum(counts*chr22_avg_tau)
 total_h2
 ```
 
