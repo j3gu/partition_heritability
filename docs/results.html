@@ -340,7 +340,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-09
+<strong>Last updated:</strong> 2020-07-13
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -431,10 +431,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree1aaee4d1deb2d0876dd0d103f00160de80ac8904targetblank1aaee4da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/1aaee4d1deb2d0876dd0d103f00160de80ac8904" target="_blank">1aaee4d</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree549e1b38bdc722209587b1dba36f0b38dddaf175targetblank549e1b3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/549e1b38bdc722209587b1dba36f0b38dddaf175" target="_blank">549e1b3</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree1aaee4d1deb2d0876dd0d103f00160de80ac8904targetblank1aaee4da" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree549e1b38bdc722209587b1dba36f0b38dddaf175targetblank549e1b3a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -446,6 +446,7 @@ Ignored files:
 Untracked files:
     Untracked:  README.html
     Untracked:  analysis/.ipynb_checkpoints/
+    Untracked:  output/total_h2_for_each_gene_chr22.txt
 
 </code></pre>
 <p>
@@ -484,6 +485,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/549e1b38bdc722209587b1dba36f0b38dddaf175/analysis/results.Rmd" target="_blank">549e1b3</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+<td>
+run analysis over chr21 and chr22
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/j3gu/partition_heritability/6681a1f14453baedd3f2a84c9029eb980326c638/docs/results.html" target="_blank">6681a1f</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -525,28 +560,62 @@ wflow_publish(“analysis/*“)
 </div>
 </div>
 </div>
-<pre class="r"><code>get_columns&lt;-function(colname){
-  cols&lt;-lapply(gene_list$V1, function(i){
-      f&lt;-read.table(paste0(output_dir, i), header = T)
-      return(f[, colname])
-  })
-  output&lt;-do.call(cbind, cols)
-  return(data.frame(f$Category, output))
-}</code></pre>
-<pre class="r"><code>#count number of reference SNPs in Category C
-annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.21.annot.gz&quot;, header = T)
-counts&lt;-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))</code></pre>
-<div id="summarize-results-across-genes" class="section level3">
-<h3>summarize results across genes</h3>
-<div id="chromosome-21" class="section level4">
-<h4>Chromosome 21</h4>
+<pre><code>[1] &quot;44.1% of genes from chr21 show non-postive heritability.&quot;</code></pre>
+<pre><code>[1] &quot;47.5% of genes from chr22 show non-postive heritability.&quot;</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /> ### Correlation between cis-SNPs’ heritatblities with gene characteristics<br />
+1. gene length (overall)</p>
+<pre class="r"><code>gene_info&lt;-read.table(paste0(ref_dir, &quot;/gene_coordinates_info.txt&quot;), 
+                      header = T, stringsAsFactors = F)
+gene_info[, &quot;length&quot;]&lt;-gene_info$end - gene_info$start
+chr21_index&lt;-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
+chr22_index&lt;-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+par(mfrow = c(1, 2))
+plot(gene_info[chr21_index, &quot;length&quot;], chr21$total_h2, xlab = &quot;gene length&quot;, ylab = &quot;total h2&quot;,
+     main = &quot;Chr21: heritabiltiy vs.gene length&quot;)
+plot(gene_info[chr22_index, &quot;length&quot;], chr22$total_h2, xlab = &quot;gene length&quot;, ylab = &quot;total h2&quot;,
+     main = &quot;Chr22: heritability vs. gene length&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>cor(gene_info[chr21_index, &quot;length&quot;], chr21$total_h2)</code></pre>
+<pre><code>[1] -0.1155015</code></pre>
+<pre class="r"><code>cor(gene_info[chr22_index, &quot;length&quot;], chr22$total_h2)</code></pre>
+<pre><code>[1] -0.09209148</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>gene length by bins<br />
+Note:<br />
+</li>
+</ol>
 <ul>
-<li>average per SNP heritability for category Cc across all genes</li>
+<li>genes with very high cis-heritability (&gt;200) are excluded in the boxplots<br />
+</li>
+<li>equal number of genes in each bin</li>
 </ul>
-<pre class="r"><code>tau&lt;-get_columns(&quot;Coefficient&quot;)
-avg_tau&lt;-apply(tau[, -1], 1, sum)
-hist(avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>chr21_cp&lt;-chr21
+chr22_cp&lt;-chr22
+#remove two data points that have extremely large h2 values
+chr21&lt;-chr21[chr21$total_h2&lt;200,]
+chr22&lt;-chr22[chr22$total_h2&lt;200,]
+chr21_index&lt;-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
+chr22_index&lt;-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+
+chr21[, &quot;bin&quot;]&lt;-cut_number(gene_info[chr21_index, &quot;length&quot;], n = 10)
+chr22[, &quot;bin&quot;]&lt;-cut_number(gene_info[chr22_index, &quot;length&quot;], n = 10)
+
+ggplot(chr21, aes(x=bin, y=total_h2) ) +
+    geom_boxplot(fill=&quot;#69b3a2&quot;) +
+    xlab(&quot;Gene length by bins&quot;) + 
+    theme(axis.text.x = element_text(angle = 90)) +
+    ggtitle(&quot;Chromosome 21&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(chr22, aes(x=bin, y=total_h2) ) +
+    geom_boxplot(fill=&quot;#69b3a2&quot;) +
+    xlab(&quot;Gene length by bins&quot;) + 
+    theme(axis.text.x = element_text(angle = 90)) + 
+    ggtitle(&quot;Chromosome 22&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /> 3. Convervation scores and number of enhancers<br />
+<img src="figure/results.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
 Past versions of unnamed-chunk-4-1.png
@@ -584,79 +653,27 @@ Jing Gu
 </table>
 </div>
 </div>
-<ul>
-<li>total Heritability estimates</li>
-</ul>
-<pre class="r"><code>total_h2&lt;-sum(counts*avg_tau)
-counts*avg_tau</code></pre>
-<pre><code>                               base                         Coding_UCSC 
-                       -106.1606735                          25.9271536 
-             Coding_UCSC.extend.500               Conserved_LindbladToh 
-                          7.7738304                          -7.1058558 
-   Conserved_LindbladToh.extend.500                        CTCF_Hoffman 
-                        -25.7914800                           1.2891531 
-            CTCF_Hoffman.extend.500                          DGF_ENCODE 
-                         -2.8171448                         -10.8060878 
-              DGF_ENCODE.extend.500                    DHS_peaks_Trynka 
-                         94.7685744                           9.9731507 
-                         DHS_Trynka               DHS_Trynka.extend.500 
-                         19.1489214                         -40.2206682 
-                 Enhancer_Andersson       Enhancer_Andersson.extend.500 
-                          0.5980143                           1.3153407 
-                   Enhancer_Hoffman         Enhancer_Hoffman.extend.500 
-                         -8.8032745                          16.9546577 
-                    FetalDHS_Trynka          FetalDHS_Trynka.extend.500 
-                          7.4968459                         -33.6280429 
-                      H3K27ac_Hnisz            H3K27ac_Hnisz.extend.500 
-                        -61.1993594                          70.3463843 
-                       H3K27ac_PGC2             H3K27ac_PGC2.extend.500 
-                        -46.8124763                          46.0324664 
-               H3K4me1_peaks_Trynka                      H3K4me1_Trynka 
-                         10.5894664                          20.7886312 
-          H3K4me1_Trynka.extend.500                H3K4me3_peaks_Trynka 
-                         45.7805700                         -12.1167281 
-                     H3K4me3_Trynka           H3K4me3_Trynka.extend.500 
-                         -2.1646497                          11.6752113 
-                H3K9ac_peaks_Trynka                       H3K9ac_Trynka 
-                         -6.0262436                          20.4298854 
-           H3K9ac_Trynka.extend.500                         Intron_UCSC 
-                         -1.5402614                         162.1822660 
-             Intron_UCSC.extend.500            PromoterFlanking_Hoffman 
-                       -192.0439556                           2.3325411 
-PromoterFlanking_Hoffman.extend.500                       Promoter_UCSC 
-                         -2.8478285                          -7.0888079 
-           Promoter_UCSC.extend.500                   Repressed_Hoffman 
-                          7.0978146                         -98.9000839 
-       Repressed_Hoffman.extend.500                 SuperEnhancer_Hnisz 
-                         84.1603177                        -653.2033700 
-     SuperEnhancer_Hnisz.extend.500                         TFBS_ENCODE 
-                        661.8887582                         -11.2600669 
-             TFBS_ENCODE.extend.500                 Transcribed_Hoffman 
-                         29.9621746                          12.4068571 
-     Transcribed_Hoffman.extend.500                         TSS_Hoffman 
-                        -15.0078088                          14.5383322 
-             TSS_Hoffman.extend.500                          UTR_3_UCSC 
-                         -2.4557708                          -4.8923614 
-              UTR_3_UCSC.extend.500                          UTR_5_UCSC 
-                        -13.0428690                           5.5695101 
-              UTR_5_UCSC.extend.500                WeakEnhancer_Hoffman 
-                         -0.9210845                          -1.2997058 
-    WeakEnhancer_Hoffman.extend.500 
-                        -13.6587548 </code></pre>
-<pre class="r"><code>total_h2</code></pre>
-<pre><code>[1] 9.211415</code></pre>
-</div>
-<div id="chromosome-22" class="section level4">
-<h4>Chromosome 22</h4>
+<pre class="r"><code>get_columns&lt;-function(colname){
+  cols&lt;-lapply(gene_list$V1, function(i){
+      f&lt;-read.table(paste0(output_dir, i), header = T)
+      return(f[, colname])
+  })
+  output&lt;-do.call(cbind, cols)
+  return(data.frame(f$Category, output))
+}</code></pre>
 <pre class="r"><code>#count number of reference SNPs in Category C
-annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.22.annot.gz&quot;, header = T)
+annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.21.annot.gz&quot;, header = T)
 counts&lt;-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))</code></pre>
+<div id="summarize-results-across-genes" class="section level3">
+<h3>summarize results across genes</h3>
+<div id="chromosome-21" class="section level4">
+<h4>Chromosome 21</h4>
 <ul>
 <li>average per SNP heritability for category Cc across all genes</li>
 </ul>
-<pre class="r"><code>tau&lt;-get_columns(&quot;Coefficient&quot;)
-avg_tau&lt;-apply(tau[, -1], 1, sum)
-hist(avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
+<pre class="r"><code>chr21_tau&lt;-get_columns(&quot;Coefficient&quot;)
+chr21_avg_tau&lt;-apply(chr21_tau[, -1], 1, sum)
+hist(chr21_avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
 <p><img src="figure/results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
@@ -695,66 +712,39 @@ Jing Gu
 </table>
 </div>
 </div>
+<pre class="r"><code>names(chr21_avg_tau)&lt;-chr21_tau$f.Category</code></pre>
 <ul>
 <li>total Heritability estimates</li>
 </ul>
-<pre class="r"><code>total_h2&lt;-sum(counts*avg_tau)
-counts*avg_tau</code></pre>
-<pre><code>                               base                         Coding_UCSC 
-                       124.54512263                         11.01500890 
-             Coding_UCSC.extend.500               Conserved_LindbladToh 
-                        31.21439291                        -32.66610779 
-   Conserved_LindbladToh.extend.500                        CTCF_Hoffman 
-                        60.38471379                        -20.32236901 
-            CTCF_Hoffman.extend.500                          DGF_ENCODE 
-                        35.85135268                         48.02972162 
-              DGF_ENCODE.extend.500                    DHS_peaks_Trynka 
-                       113.31980754                         46.38364021 
-                         DHS_Trynka               DHS_Trynka.extend.500 
-                       -96.95503072                         37.30934836 
-                 Enhancer_Andersson       Enhancer_Andersson.extend.500 
-                        -1.38018219                         12.49602589 
-                   Enhancer_Hoffman         Enhancer_Hoffman.extend.500 
-                       -12.14400385                         62.62671415 
-                    FetalDHS_Trynka          FetalDHS_Trynka.extend.500 
-                        -8.25874201                         -7.45343443 
-                      H3K27ac_Hnisz            H3K27ac_Hnisz.extend.500 
-                       244.66866250                       -254.76507565 
-                       H3K27ac_PGC2             H3K27ac_PGC2.extend.500 
-                       188.46488329                       -131.54958665 
-               H3K4me1_peaks_Trynka                      H3K4me1_Trynka 
-                        -1.67600952                         45.46569202 
-          H3K4me1_Trynka.extend.500                H3K4me3_peaks_Trynka 
-                        60.73198376                          0.91174103 
-                     H3K4me3_Trynka           H3K4me3_Trynka.extend.500 
-                       -33.69479061                         18.00250450 
-                H3K9ac_peaks_Trynka                       H3K9ac_Trynka 
-                        55.20301206                       -123.18498162 
-           H3K9ac_Trynka.extend.500                         Intron_UCSC 
-                        21.82389258                        237.67048171 
-             Intron_UCSC.extend.500            PromoterFlanking_Hoffman 
-                      -386.78613627                          4.17579193 
-PromoterFlanking_Hoffman.extend.500                       Promoter_UCSC 
-                        20.33686554                        -31.07004126 
-           Promoter_UCSC.extend.500                   Repressed_Hoffman 
-                        72.57749249                          5.81377033 
-       Repressed_Hoffman.extend.500                 SuperEnhancer_Hnisz 
-                       -30.91052675                        -45.55984048 
-     SuperEnhancer_Hnisz.extend.500                         TFBS_ENCODE 
-                        61.14042481                        108.53540328 
-             TFBS_ENCODE.extend.500                 Transcribed_Hoffman 
-                      -291.62275920                         52.19622280 
-     Transcribed_Hoffman.extend.500                         TSS_Hoffman 
-                       -90.74475157                         -4.20026272 
-             TSS_Hoffman.extend.500                          UTR_3_UCSC 
-                        -0.06470263                          1.93262768 
-              UTR_3_UCSC.extend.500                          UTR_5_UCSC 
-                         5.67029264                          9.25117319 
-              UTR_5_UCSC.extend.500                WeakEnhancer_Hoffman 
-                       -11.65774906                         -1.28590247 
-    WeakEnhancer_Hoffman.extend.500 
-                       -55.82316268 </code></pre>
-<pre class="r"><code>total_h2</code></pre>
+<pre class="r"><code>total_h2&lt;-sum(counts*chr21_avg_tau)
+total_h2</code></pre>
+<pre><code>[1] 9.211415</code></pre>
+</div>
+<div id="chromosome-22" class="section level4">
+<h4>Chromosome 22</h4>
+<pre class="r"><code>#count number of reference SNPs in Category C
+annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.22.annot.gz&quot;, header = T)
+counts&lt;-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))</code></pre>
+<ul>
+<li>average per SNP heritability for category Cc across all genes</li>
+</ul>
+<pre class="r"><code>chr22_tau&lt;-get_columns(&quot;Coefficient&quot;)
+chr22_avg_tau&lt;-apply(chr22_tau[, -1], 1, sum)
+hist(chr22_avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>names(chr22_avg_tau)&lt;-chr22_tau$f.Category
+head(chr22_avg_tau)</code></pre>
+<pre><code>                            base_0                      Coding_UCSC_0 
+                      0.0009627495                       0.0028316218 
+          Coding_UCSC.extend.500_0            Conserved_LindbladToh_0 
+                      0.0020304685                      -0.0094602108 
+Conserved_LindbladToh.extend.500_0                     CTCF_Hoffman_0 
+                      0.0013429868                      -0.0041867262 </code></pre>
+<ul>
+<li>total Heritability estimates</li>
+</ul>
+<pre class="r"><code>total_h2&lt;-sum(counts*chr22_avg_tau)
+total_h2</code></pre>
 <pre><code>[1] 123.9726</code></pre>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 <br>
@@ -783,13 +773,21 @@ locale:
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
+other attached packages:
+[1] ggplot2_3.1.1
+
 loaded via a namespace (and not attached):
- [1] workflowr_1.6.0 Rcpp_1.0.4.6    digest_0.6.18   later_0.7.5    
- [5] rprojroot_1.3-2 R6_2.3.0        backports_1.1.2 git2r_0.26.1   
- [9] magrittr_1.5    evaluate_0.12   stringi_1.2.4   fs_1.3.1       
-[13] promises_1.0.1  whisker_0.3-2   rmarkdown_1.10  tools_3.5.1    
-[17] stringr_1.3.1   glue_1.3.0      httpuv_1.4.5    yaml_2.2.0     
-[21] compiler_3.5.1  htmltools_0.3.6 knitr_1.20     </code></pre>
+ [1] Rcpp_1.0.4.6     compiler_3.5.1   pillar_1.3.1     later_0.7.5     
+ [5] git2r_0.26.1     plyr_1.8.4       workflowr_1.6.0  tools_3.5.1     
+ [9] digest_0.6.18    evaluate_0.12    tibble_2.1.1     gtable_0.2.0    
+[13] pkgconfig_2.0.2  rlang_0.4.0      yaml_2.2.0       withr_2.1.2     
+[17] stringr_1.3.1    dplyr_0.8.0.1    knitr_1.20       fs_1.3.1        
+[21] rprojroot_1.3-2  grid_3.5.1       tidyselect_0.2.5 glue_1.3.0      
+[25] R6_2.3.0         rmarkdown_1.10   purrr_0.3.2      magrittr_1.5    
+[29] whisker_0.3-2    backports_1.1.2  scales_1.0.0     promises_1.0.1  
+[33] htmltools_0.3.6  assertthat_0.2.0 colorspace_1.3-2 httpuv_1.4.5    
+[37] labeling_0.3     stringi_1.2.4    lazyeval_0.2.1   munsell_0.5.0   
+[41] crayon_1.3.4    </code></pre>
 </div>
 </div>
 </div>
