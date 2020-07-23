@@ -340,7 +340,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-13
+<strong>Last updated:</strong> 2020-07-23
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -431,10 +431,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree549e1b38bdc722209587b1dba36f0b38dddaf175targetblank549e1b3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/549e1b38bdc722209587b1dba36f0b38dddaf175" target="_blank">549e1b3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree9249dba85fa148462cf766636b39e565615893dctargetblank9249dbaa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/j3gu/partition_heritability/tree/9249dba85fa148462cf766636b39e565615893dc" target="_blank">9249dba</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree549e1b38bdc722209587b1dba36f0b38dddaf175targetblank549e1b3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomj3gupartitionheritabilitytree9249dba85fa148462cf766636b39e565615893dctargetblank9249dbaa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -446,6 +446,7 @@ Ignored files:
 Untracked files:
     Untracked:  README.html
     Untracked:  analysis/.ipynb_checkpoints/
+    Untracked:  analysis/compare_with_other_eQTLs_analyiss.Rmd
     Untracked:  output/total_h2_for_each_gene_chr22.txt
 
 </code></pre>
@@ -485,6 +486,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/9249dba85fa148462cf766636b39e565615893dc/analysis/results.Rmd" target="_blank">9249dba</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-23
+</td>
+<td>
+wflow_publish(“analysis/results.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/j3gu/partition_heritability/8b988808c41214171cefeebfefbba6e4424df84e/docs/results.html" target="_blank">8b98880</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -560,62 +595,220 @@ wflow_publish(“analysis/*“)
 </div>
 </div>
 </div>
-<pre><code>[1] &quot;44.1% of genes from chr21 show non-postive heritability.&quot;</code></pre>
-<pre><code>[1] &quot;47.5% of genes from chr22 show non-postive heritability.&quot;</code></pre>
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /> ### Correlation between cis-SNPs’ heritatblities with gene characteristics<br />
-1. gene length (overall)</p>
-<pre class="r"><code>gene_info&lt;-read.table(paste0(ref_dir, &quot;/gene_coordinates_info.txt&quot;), 
-                      header = T, stringsAsFactors = F)
-gene_info[, &quot;length&quot;]&lt;-gene_info$end - gene_info$start
-chr21_index&lt;-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
-chr22_index&lt;-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
-par(mfrow = c(1, 2))
-plot(gene_info[chr21_index, &quot;length&quot;], chr21$total_h2, xlab = &quot;gene length&quot;, ylab = &quot;total h2&quot;,
-     main = &quot;Chr21: heritabiltiy vs.gene length&quot;)
-plot(gene_info[chr22_index, &quot;length&quot;], chr22$total_h2, xlab = &quot;gene length&quot;, ylab = &quot;total h2&quot;,
-     main = &quot;Chr22: heritability vs. gene length&quot;)</code></pre>
+<div id="scale-h2-for-each-gene" class="section level3">
+<h3>Scale h2 for each gene</h3>
+<ol style="list-style-type: decimal">
+<li>The numbers of cis SNPs for each gene were calcualted. Cis SNPs are defined as +/- 1Mb away from TSS of genes.</li>
+<li>The h2 value for each gene from LDSC output was scaled as <span class="math display">\[
+    \hat h_{s}^2 = \hat h^2 * \frac{\text{# of cis SNPs}}{M_{total}}
+\]</span> , where <span class="math inline">\(M_{total} = 9254535\)</span> - the total number of genome-wide SNPs from 1000 genome.</li>
+</ol>
+</div>
+<div id="summarize-snp-heritabilities-for-gene-expression" class="section level3">
+<h3>Summarize SNP heritabilities for gene expression</h3>
+<ul>
+<li>Any genes with negative total h2 were excluded in the analysis.</li>
+</ul>
+<pre class="r"><code>ref_dir&lt;-&quot;/project2/xuanyao/jing/data/eQTLGen&quot;
+out_dir&lt;-&quot;/project2/xuanyao/jing/project/results/total_h2&quot;
+
+h2&lt;-lapply(1:22, function(i){
+  f&lt;-read.table(paste0(out_dir, sprintf(&quot;/chr%d_total_h2_stats.txt&quot;, i)), header = T)
+  chr&lt;-rep(paste0(&quot;chr&quot;, i), dim(f)[1])
+  return(data.frame(f, chr))
+})
+h2_df&lt;-do.call(rbind, h2)
+print(paste0(&quot;The mean total h2 across genes without any filtering is &quot;, round(mean(h2_df$h2[h2_df$h2 &gt;= 0]),2)))</code></pre>
+<pre><code>[1] &quot;The mean total h2 across genes without any filtering is 0.04&quot;</code></pre>
+<pre class="r"><code>print(paste0(&quot;The standard deviation of total h2 values across genes are &quot;, sd(h2_df[h2_df$h2 &gt;= 0, &quot;sd&quot;])))</code></pre>
+<pre><code>[1] &quot;The standard deviation of total h2 values across genes are 2566.80482162777&quot;</code></pre>
+<pre class="r"><code>print(paste0(round(100*sum(h2_df$h2[h2_df$h2 &gt;=0]&gt;=1)/dim(h2_df)[1],1), &quot;% of the genes have estimated h2 to be higher than 1.&quot;))</code></pre>
+<pre><code>[1] &quot;0.1% of the genes have estimated h2 to be higher than 1.&quot;</code></pre>
+<ul>
+<li>Any genes with estimated h2 higher than one were excluded in the analysis.<br />
+Average heritability estimate was calculated as</li>
+</ul>
+<p><span class="math display">\[
+    \frac{\sum_{1}^nh^2_{g}}{n}
+\]</span></p>
+<pre class="r"><code>h2_df_raw&lt;-h2_df
+h2_df&lt;-h2_df[h2_df$h2 &gt;=0 &amp; h2_df$h2&lt;=1, ]
+print(paste0(&quot;Average heritability estimate was calculated to be &quot;, round(sum(h2_df$h2)/dim(h2_df)[1],3)))</code></pre>
+<pre><code>[1] &quot;Average heritability estimate was calculated to be 0.03&quot;</code></pre>
+<pre class="r"><code>#take count of standard deviation
+h2_df[,&quot;Z_score&quot;]&lt;-(h2_df$h2-mean(h2_df$h2))/h2_df$sd
+hist(h2_df$Z_score, main = &quot;Transform estimated h2 into z scores&quot;)</code></pre>
 <p><img src="figure/results.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>cor(gene_info[chr21_index, &quot;length&quot;], chr21$total_h2)</code></pre>
-<pre><code>[1] -0.1155015</code></pre>
-<pre class="r"><code>cor(gene_info[chr22_index, &quot;length&quot;], chr22$total_h2)</code></pre>
-<pre><code>[1] -0.09209148</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>gene length by bins<br />
-Note:<br />
-</li>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/8b988808c41214171cefeebfefbba6e4424df84e/docs/figure/results.Rmd/unnamed-chunk-2-1.png" target="_blank">8b98880</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>#Further filter h2 by within two standard deviations of average h2
+#h2_df_correct&lt;-h2_df
+#h2_df&lt;-h2_df_correct[h2_df$Z_score&gt;=-2 &amp; h2_df$Z_score&lt;=2,] </code></pre>
+<div id="observations" class="section level4">
+<h4>Observations:</h4>
+<ol style="list-style-type: decimal">
+<li>The overall average cis-heritability estimate for blood was calculated to be 0.156, which is within the known range for cis-SNP heritability for RNASeq and ChIP-Seq (2%-20%).</li>
 </ol>
 <ul>
-<li>genes with very high cis-heritability (&gt;200) are excluded in the boxplots<br />
-</li>
-<li>equal number of genes in each bin</li>
+<li>Split by chromosome</li>
 </ul>
-<pre class="r"><code>chr21_cp&lt;-chr21
-chr22_cp&lt;-chr22
-#remove two data points that have extremely large h2 values
-chr21&lt;-chr21[chr21$total_h2&lt;200,]
-chr22&lt;-chr22[chr22$total_h2&lt;200,]
-chr21_index&lt;-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
-chr22_index&lt;-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+<pre class="r"><code>avg_h2_by_chr&lt;-unlist(lapply(h2, function(i){
+  return(round(sum(i$h2[i$h2 &gt;= 0])/dim(i)[1],3))
+}))
+avg_h2_df&lt;-data.frame(paste0(&quot;chr&quot;, 1:22), avg_h2_by_chr)
+colnames(avg_h2_df)&lt;-c(&quot;chr&quot;, &quot;avg_h2&quot;)
 
-chr21[, &quot;bin&quot;]&lt;-cut_number(gene_info[chr21_index, &quot;length&quot;], n = 10)
-chr22[, &quot;bin&quot;]&lt;-cut_number(gene_info[chr22_index, &quot;length&quot;], n = 10)
-
-ggplot(chr21, aes(x=bin, y=total_h2) ) +
-    geom_boxplot(fill=&quot;#69b3a2&quot;) +
-    xlab(&quot;Gene length by bins&quot;) + 
-    theme(axis.text.x = element_text(angle = 90)) +
-    ggtitle(&quot;Chromosome 21&quot;)</code></pre>
+p&lt;-ggplot(avg_h2_df, aes(x = chr, y = avg_h2)) + 
+    geom_bar(stat = &quot;identity&quot;) + 
+    theme(axis.text.x = element_text(angle = 45, vjust = -0.000005)) +
+    geom_hline(yintercept=0.03, color = &quot;red&quot;, linetype=&quot;dashed&quot;)
+p</code></pre>
 <p><img src="figure/results.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>ggplot(chr22, aes(x=bin, y=total_h2) ) +
-    geom_boxplot(fill=&quot;#69b3a2&quot;) +
-    xlab(&quot;Gene length by bins&quot;) + 
-    theme(axis.text.x = element_text(angle = 90)) + 
-    ggtitle(&quot;Chromosome 22&quot;)</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /> 3. Convervation scores and number of enhancers<br />
-<img src="figure/results.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/8b988808c41214171cefeebfefbba6e4424df84e/docs/figure/results.Rmd/unnamed-chunk-3-1.png" target="_blank">8b98880</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>###Violin plots of distribution of h2 for each chromosome
+p2&lt;-ggplot(h2_df_raw, aes(x = chr, y = h2)) + geom_violin() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ylab(&quot;h2 (All genes included)&quot;)
+  ggtitle(&quot;Distribution of estimated h2 across chromosomes&quot;)</code></pre>
+<pre><code>$title
+[1] &quot;Distribution of estimated h2 across chromosomes&quot;
+
+attr(,&quot;class&quot;)
+[1] &quot;labels&quot;</code></pre>
+<pre class="r"><code>p2</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/j3gu/partition_heritability/blob/8b988808c41214171cefeebfefbba6e4424df84e/docs/figure/results.Rmd/unnamed-chunk-3-2.png" target="_blank">8b98880</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>p3&lt;-ggplot(h2_df, aes(x = chr, y = h2)) + geom_violin() +
+  geom_boxplot(width=.1) +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ylab(&quot;filtered_h2&quot;)
+  ggtitle(&quot;Distribution of estimated h2 across chromosomes&quot;)</code></pre>
+<pre><code>$title
+[1] &quot;Distribution of estimated h2 across chromosomes&quot;
+
+attr(,&quot;class&quot;)
+[1] &quot;labels&quot;</code></pre>
+<pre class="r"><code>p3</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /> #### Observations:<br />
+1. The average heritability for gene expression varies across chromosomes. Chr7, chr14, chr16 and chr19 have higher average heritability compared to other chromosomes.<br />
+2. The distributions of estimated heritability differ between chromosomes. Certain chromosomes such as chr5, chr6, and chr14 have extreme negative h2, while others have h2 values higher than one.<br />
+3. After filtering the negative and greater than one h2 values, estimated h2 across chromosomes dislay simialr distributions.</p>
+</div>
+<div id="correlation-between-cis-snps-heritatblities-with-gene-characteristics" class="section level4">
+<h4>Correlation between cis-SNPs’ heritatblities with gene characteristics</h4>
+<ol style="list-style-type: decimal">
+<li><strong>gene length (overall)</strong></li>
+</ol>
+<pre class="r"><code>plot(x=h2_df$gene_length, y=h2_df$h2, xlab = &quot;gene length&quot;, ylab = &quot;estimated h2&quot;,
+     main = &quot;Heritabiltiy vs.gene length&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
 Past versions of unnamed-chunk-4-1.png
@@ -640,6 +833,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/j3gu/partition_heritability/blob/8b988808c41214171cefeebfefbba6e4424df84e/docs/figure/results.Rmd/unnamed-chunk-4-1.png" target="_blank">8b98880</a>
+</td>
+<td>
+Jing Gu
+</td>
+<td>
+2020-07-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/j3gu/partition_heritability/blob/9df76c1b3fcba41d239c46cf2ee35af7a357f5fe/docs/figure/results.Rmd/unnamed-chunk-4-1.png" target="_blank">9df76c1</a>
 </td>
 <td>
@@ -653,100 +857,78 @@ Jing Gu
 </table>
 </div>
 </div>
-<pre class="r"><code>get_columns&lt;-function(colname){
-  cols&lt;-lapply(gene_list$V1, function(i){
-      f&lt;-read.table(paste0(output_dir, i), header = T)
-      return(f[, colname])
-  })
-  output&lt;-do.call(cbind, cols)
-  return(data.frame(f$Category, output))
-}</code></pre>
-<pre class="r"><code>#count number of reference SNPs in Category C
-annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.21.annot.gz&quot;, header = T)
-counts&lt;-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))</code></pre>
-<div id="summarize-results-across-genes" class="section level3">
-<h3>summarize results across genes</h3>
-<div id="chromosome-21" class="section level4">
-<h4>Chromosome 21</h4>
+<pre class="r"><code>cor(h2_df$gene_length, h2_df$h2)</code></pre>
+<pre><code>[1] -0.04826811</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>gene length by binS</strong><br />
+Note:<br />
+</li>
+</ol>
 <ul>
-<li>average per SNP heritability for category Cc across all genes</li>
+<li>equal number of genes in each bin</li>
 </ul>
-<pre class="r"><code>chr21_tau&lt;-get_columns(&quot;Coefficient&quot;)
-chr21_avg_tau&lt;-apply(chr21_tau[, -1], 1, sum)
-hist(chr21_avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
-Past versions of unnamed-chunk-8-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-8-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/j3gu/partition_heritability/blob/9df76c1b3fcba41d239c46cf2ee35af7a357f5fe/docs/figure/results.Rmd/unnamed-chunk-8-1.png" target="_blank">9df76c1</a>
-</td>
-<td>
-Jing Gu
-</td>
-<td>
-2020-07-09
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>names(chr21_avg_tau)&lt;-chr21_tau$f.Category</code></pre>
-<ul>
-<li>total Heritability estimates</li>
-</ul>
-<pre class="r"><code>total_h2&lt;-sum(counts*chr21_avg_tau)
-total_h2</code></pre>
-<pre><code>[1] 9.211415</code></pre>
-</div>
-<div id="chromosome-22" class="section level4">
-<h4>Chromosome 22</h4>
-<pre class="r"><code>#count number of reference SNPs in Category C
-annotations&lt;-read.table(&quot;/project2/xuanyao/jing/reference/baseline/baseline.22.annot.gz&quot;, header = T)
-counts&lt;-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))</code></pre>
-<ul>
-<li>average per SNP heritability for category Cc across all genes</li>
-</ul>
-<pre class="r"><code>chr22_tau&lt;-get_columns(&quot;Coefficient&quot;)
-chr22_avg_tau&lt;-apply(chr22_tau[, -1], 1, sum)
-hist(chr22_avg_tau, main = &quot;Average Tau_C across all genes&quot;)</code></pre>
-<p><img src="figure/results.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>names(chr22_avg_tau)&lt;-chr22_tau$f.Category
-head(chr22_avg_tau)</code></pre>
-<pre><code>                            base_0                      Coding_UCSC_0 
-                      0.0009627495                       0.0028316218 
-          Coding_UCSC.extend.500_0            Conserved_LindbladToh_0 
-                      0.0020304685                      -0.0094602108 
-Conserved_LindbladToh.extend.500_0                     CTCF_Hoffman_0 
-                      0.0013429868                      -0.0041867262 </code></pre>
-<ul>
-<li>total Heritability estimates</li>
-</ul>
-<pre class="r"><code>total_h2&lt;-sum(counts*chr22_avg_tau)
-total_h2</code></pre>
-<pre><code>[1] 123.9726</code></pre>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<pre class="r"><code>h2_df[, &quot;bin&quot;]&lt;-cut_number(h2_df[,&quot;gene_length&quot;], n = 20)
+
+ggplot(h2_df, aes(x=bin, y=h2) ) +
+    geom_boxplot(fill=&quot;#69b3a2&quot;) +
+    xlab(&quot;Gene length by bins&quot;) + 
+    ylab(&quot;Estimated h2&quot;) + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle(&quot;Estimated h2 against gene lengths divided into 20 bins&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /> #### Observations:<br />
+1. Overall, estimated heratibility has no correlation with gene length based on correlation coefficient and scatter plot.<br />
+2. When we divided gene length into bins, genes in the lowest three or four quantiles seem to have higher estimated h2 values. More rigorous statistical tests need to be performed to compare the distributions. Nontheless, it is not obvious to me that there is a trend among the h2 with respect to gene length.</p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Convervation scores</strong><br />
+<img src="figure/results.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/results.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /> #### Observations:<br />
+</li>
+<li>The scatter plot shows that genes are either highly conserved or not conversed are enriched with low estimated h2. Genes with low pLI scores seem have a higher proportion with high estimated h2.<br />
+</li>
+<li>Again, the trend is not obvious when dividing conservation scores by bins.</li>
+</ol>
+<p>4.<strong>EDS scores and number of enhancers</strong></p>
+<pre class="r"><code>h2_df[,&quot;EDS&quot;]&lt;-unlist(lapply(h2_df$gene_id, function(i){
+  if(as.character(i) %in% ref$GeneSymbol){
+    return(ref[ref$GeneSymbol == as.character(i), &quot;EDS&quot;][1])
+  }else{
+    return(NA)
+  }
+}))
+
+h2_df[, &quot;EDS_bin&quot;]&lt;-cut_number(h2_df[,&quot;EDS&quot;], n = 20)
+
+plot(y = h2_df$h2, x = h2_df$EDS, main = &quot;Estimated heritability vs. EDS Scores&quot;,
+     xlab = &quot;EDS scores&quot;, ylab = &quot;Estimated h2&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(h2_df[!is.na(h2_df$EDS),], aes(x=EDS_bin, y=h2) ) +
+    geom_boxplot(fill=&quot;#69b3a2&quot;) +
+    xlab(&quot;EDS scores by bins&quot;) + 
+    ylab(&quot;Estimated h2&quot;) + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle(&quot;Estimated h2 against EDS scores divided into 20 bins&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>h2_df[,&quot;num_enhancers&quot;]&lt;-unlist(lapply(h2_df$gene_id, function(i){
+  if(as.character(i) %in% ref$GeneSymbol){
+    return(ref[ref$GeneSymbol == as.character(i), &quot;ActivityLinking_EnhancerNumber&quot;][1])
+  }else{
+    return(NA)
+  }
+}))
+
+plot(y = h2_df$h2, x = h2_df$num_enhancers, main = &quot;Estimated heritability vs. Activity_linking_enhancer_numbers&quot;,
+     xlab = &quot;Enhancer numbers&quot;, ylab = &quot;Estimated h2&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>h2_df[, &quot;num_enhancers_bin&quot;]&lt;-cut_number(h2_df[,&quot;num_enhancers&quot;], n = 20)
+
+ggplot(h2_df[!is.na(h2_df$num_enhancers),], aes(x=num_enhancers_bin, y=h2) ) +
+    geom_boxplot(fill=&quot;#69b3a2&quot;) +
+    xlab(&quot;Number of enhancers by bins&quot;) + 
+    ylab(&quot;Estimated h2&quot;) + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle(&quot;Estimated h2 against activity linking enhancer numbers divided into 20 bins&quot;)</code></pre>
+<p><img src="figure/results.Rmd/unnamed-chunk-7-4.png" width="672" style="display: block; margin: auto;" /> #### Observations<br />
+1. The scatter plots of EDS scores and Enhancer numbers seem to be noisy to see the signal.<br />
+2. It is also hard to see the trend.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
