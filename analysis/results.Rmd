@@ -112,7 +112,7 @@ ggplot(h2_df, aes(x=bin, y=h2) ) +
     theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
     ggtitle("Estimated h2 against gene lengths divided into 20 bins")
 ```
-#### Observations:   
+#### Observations:    
 1. Overall, estimated heratibility has no correlation with gene length based on correlation coefficient and scatter plot.  
 2. When we divided gene length into bins, genes in the lowest three or four quantiles seem to have higher estimated h2 values. More rigorous statistical tests need to be performed to compare the distributions. Nontheless, it is not obvious to me that there is a trend among the h2 with respect to gene length.   
 
@@ -155,7 +155,7 @@ ggplot(h2_df[!is.na(h2_df$pLI),], aes(x=pLI_bin, y=h2) ) +
 
 
 ```
-#### Observations:     
+#### Observations:      
 1. The scatter plot shows that genes are either highly conserved or not conversed are enriched with low estimated h2. Genes with low pLI scores seem have a higher proportion with high estimated h2.      
 2. Again, the trend is not obvious when dividing conservation scores by bins.      
 
@@ -207,7 +207,7 @@ ggplot(h2_df[!is.na(h2_df$num_enhancers),], aes(x=num_enhancers_bin, y=h2) ) +
     ggtitle("Estimated h2 against activity linking enhancer numbers divided into 20 bins")
 
 ```
-#### Observations  
+#### Observations:  
 1. The scatter plots of EDS scores and Enhancer numbers seem to be noisy to see the signal.    
 2. It is also hard to see the trend.   
 
