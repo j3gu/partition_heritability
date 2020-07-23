@@ -1,189 +1,213 @@
 ---
 title: "results"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ref_dir<-"/project2/xuanyao/jing/data/eQTLGen"
+out_dir<-"/project2/xuanyao/jing/project/results/total_h2"
 library(ggplot2)
 ```
+### Scale h2 for each gene
+1. The numbers of cis SNPs for each gene were calcualted. Cis SNPs are defined as +/- 1Mb away from TSS of genes.
+2. The h2 value for each gene from LDSC output was scaled as
+$$
+        \hat h_{s}^2 = \hat h^2 * \frac{\text{# of cis SNPs}}{M_{total}}
+$$
+, where $M_{total} = 9254535$ - the total number of genome-wide SNPs from 1000 genome.
 
-```{r, echo = F}
-setwd("~/scratch-midway2/projects/gene_heritability")
-chr21_all<-read.table("chr21/output/total_h2_for_each_gene_chr21.txt", header = F,
-                  stringsAsFactors = F)
-chr22_all<-read.table("chr22/output/total_h2_for_each_gene_chr22.txt", header = F,
-                  stringsAsFactors = F)
-header<-c("gene", "total_h2", "std")
-colnames(chr21_all)<-header
-colnames(chr22_all)<-header
 
-chr21_all[,"sign"]<-chr21_all$total_h2 > 0
-chr22_all[,"sign"]<-chr22_all$total_h2 > 0
+### Summarize SNP heritabilities for gene expression     
+* Any genes with negative total h2 were excluded in the analysis.     
+```{r}
+ref_dir<-"/project2/xuanyao/jing/data/eQTLGen"
+out_dir<-"/project2/xuanyao/jing/project/results/total_h2"
 
-#filter out genes with negative heritability 
-negative_h2_percent_chr21<-sum(chr21_all[,2] < 0)/dim(chr21_all)[1]
-negative_h2_percent_chr22<-sum(chr22_all[,2] < 0)/dim(chr22_all)[1]
+h2<-lapply(1:22, function(i){
+  f<-read.table(paste0(out_dir, sprintf("/chr%d_total_h2_stats.txt", i)), header = T)
+  chr<-rep(paste0("chr", i), dim(f)[1])
+  return(data.frame(f, chr))
+})
+h2_df<-do.call(rbind, h2)
+print(paste0("The mean total h2 across genes without any filtering is ", round(mean(h2_df$h2[h2_df$h2 >= 0]),2)))
+print(paste0("The standard deviation of total h2 values across genes are ", sd(h2_df[h2_df$h2 >= 0, "sd"])))
+print(paste0(round(100*sum(h2_df$h2[h2_df$h2 >=0]>=1)/dim(h2_df)[1],1), "% of the genes have estimated h2 to be higher than 1."))
+```
+* Any genes with estimated h2 higher than one were excluded in the analysis.  
+Average heritability estimate was calculated as     
 
-chr21_out<-chr21_all[chr21_all[, 2]<=0, ]
-chr22_out<-chr22_all[chr22_all[, 2]<=0, ]
+$$
+    \frac{\sum_{1}^nh^2_{g}}{n}
+$$
 
-chr21<-chr21_all[chr21_all[, 2] >0, ]
-chr22<-chr22_all[chr22_all[, 2] >0, ]
+```{r}
+h2_df_raw<-h2_df
+h2_df<-h2_df[h2_df$h2 >=0 & h2_df$h2<=1, ]
+print(paste0("Average heritability estimate was calculated to be ", round(sum(h2_df$h2)/dim(h2_df)[1],3)))
 
-print(paste0(100*round(negative_h2_percent_chr21 ,3), "% of genes from chr21 show non-postive heritability."))
-print(paste0(100*round(negative_h2_percent_chr22 ,3), "% of genes from chr22 show non-postive heritability."))
+#take count of standard deviation
+h2_df[,"Z_score"]<-(h2_df$h2-mean(h2_df$h2))/h2_df$sd
+hist(h2_df$Z_score, main = "Transform estimated h2 into z scores")
 
-ggplot(chr21_all, aes(x=std, fill=sign)) + geom_histogram(alpha = 0.5) + 
-  ggtitle("Chr21: Histogram of standard deviations for estimated h2") + 
-  scale_fill_discrete(name="Signs for h2",
-                         breaks=c("TRUE", "FALSE"),
-                         labels=c("POSTIVE", "NON-POSTIVE"))
-ggplot(chr22_all, aes(x=std, fill=sign)) + geom_histogram(alpha = 0.5) + 
-  ggtitle("Chr22: Histogram of standard deviations for estimated h2") + 
-  scale_fill_discrete(name="Signs for h2",
-                         breaks=c("TRUE", "FALSE"),
-                         labels=c("POSTIVE", "NON-POSTIVE"))
+#Further filter h2 by within two standard deviations of average h2
+#h2_df_correct<-h2_df
+#h2_df<-h2_df_correct[h2_df$Z_score>=-2 & h2_df$Z_score<=2,] 
 
 ```
-### Correlation between cis-SNPs' heritatblities with gene characteristics   
-1. gene length (overall)  
+#### Observations:  
+1. The overall average cis-heritability estimate for blood was calculated to be 0.156, which is within the known range for cis-SNP heritability for RNASeq and ChIP-Seq (2%-20%).  
+
+* Split by chromosome  
 ```{r}
-gene_info<-read.table(paste0(ref_dir, "/gene_coordinates_info.txt"), 
-                      header = T, stringsAsFactors = F)
-gene_info[, "length"]<-gene_info$end - gene_info$start
-chr21_index<-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
-chr22_index<-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
-par(mfrow = c(1, 2))
-plot(gene_info[chr21_index, "length"], chr21$total_h2, xlab = "gene length", ylab = "total h2",
-     main = "Chr21: heritabiltiy vs.gene length")
-plot(gene_info[chr22_index, "length"], chr22$total_h2, xlab = "gene length", ylab = "total h2",
-     main = "Chr22: heritability vs. gene length")
-cor(gene_info[chr21_index, "length"], chr21$total_h2)
-cor(gene_info[chr22_index, "length"], chr22$total_h2)
+avg_h2_by_chr<-unlist(lapply(h2, function(i){
+  return(round(sum(i$h2[i$h2 >= 0])/dim(i)[1],3))
+}))
+avg_h2_df<-data.frame(paste0("chr", 1:22), avg_h2_by_chr)
+colnames(avg_h2_df)<-c("chr", "avg_h2")
+
+p<-ggplot(avg_h2_df, aes(x = chr, y = avg_h2)) + 
+    geom_bar(stat = "identity") + 
+    theme(axis.text.x = element_text(angle = 45, vjust = -0.000005)) +
+    geom_hline(yintercept=0.03, color = "red", linetype="dashed")
+p
+###Violin plots of distribution of h2 for each chromosome
+p2<-ggplot(h2_df_raw, aes(x = chr, y = h2)) + geom_violin() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ylab("h2 (All genes included)")
+  ggtitle("Distribution of estimated h2 across chromosomes")
+p2
+
+p3<-ggplot(h2_df, aes(x = chr, y = h2)) + geom_violin() +
+  geom_boxplot(width=.1) +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ylab("filtered_h2")
+  ggtitle("Distribution of estimated h2 across chromosomes")
+p3
 ```
-2. gene length by bins   
-Note:  
-  * genes with very high cis-heritability (>200) are excluded in the boxplots  
-  * equal number of genes in each bin  
+#### Observations:    
+1. The average heritability for gene expression varies across chromosomes. Chr7, chr14, chr16 and chr19 have higher average heritability compared to other chromosomes.   
+2. The distributions of estimated heritability differ between chromosomes. Certain chromosomes such as chr5, chr6, and chr14 have extreme negative h2, while others have h2 values higher than one.   
+3. After filtering the negative and greater than one h2 values, estimated h2 across chromosomes dislay simialr distributions.    
+
+#### Correlation between cis-SNPs' heritatblities with gene characteristics      
+1. **gene length (overall)**  
 ```{r}
-chr21_cp<-chr21
-chr22_cp<-chr22
-#remove two data points that have extremely large h2 values
-chr21<-chr21[chr21$total_h2<200,]
-chr22<-chr22[chr22$total_h2<200,]
-chr21_index<-unlist(lapply(chr21$gene, function(i){which(gene_info$gene_name == i)}))
-chr22_index<-unlist(lapply(chr22$gene, function(i){which(gene_info$gene_name == i)}))
+plot(x=h2_df$gene_length, y=h2_df$h2, xlab = "gene length", ylab = "estimated h2",
+     main = "Heritabiltiy vs.gene length")
+cor(h2_df$gene_length, h2_df$h2)
+```
+2. **gene length by binS**  
+Note:    
+  * equal number of genes in each bin    
+```{r}
+h2_df[, "bin"]<-cut_number(h2_df[,"gene_length"], n = 20)
 
-chr21[, "bin"]<-cut_number(gene_info[chr21_index, "length"], n = 10)
-chr22[, "bin"]<-cut_number(gene_info[chr22_index, "length"], n = 10)
-
-ggplot(chr21, aes(x=bin, y=total_h2) ) +
+ggplot(h2_df, aes(x=bin, y=h2) ) +
     geom_boxplot(fill="#69b3a2") +
     xlab("Gene length by bins") + 
-    theme(axis.text.x = element_text(angle = 90)) +
-    ggtitle("Chromosome 21")
-
-ggplot(chr22, aes(x=bin, y=total_h2) ) +
-    geom_boxplot(fill="#69b3a2") +
-    xlab("Gene length by bins") + 
-    theme(axis.text.x = element_text(angle = 90)) + 
-    ggtitle("Chromosome 22")
+    ylab("Estimated h2") + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle("Estimated h2 against gene lengths divided into 20 bins")
 ```
-3. Convervation scores and number of enhancers  
+#### Observations:   
+1. Overall, estimated heratibility has no correlation with gene length based on correlation coefficient and scatter plot.  
+2. When we divided gene length into bins, genes in the lowest three or four quantiles seem to have higher estimated h2 values. More rigorous statistical tests need to be performed to compare the distributions. Nontheless, it is not obvious to me that there is a trend among the h2 with respect to gene length.   
+
+
+3. **Convervation scores**  
 ```{r echo = FALSE}
-get_reference<-function(genes, type){
-  return(lapply(genes, function(i){
-    gene_id <-gene_info[gene_info$gene_name == i, "gene_id"]
-    ref[ref$GeneSymbol == gene_id, type]
-  }))
-}
+ref_dir<-"/project2/xuanyao/jing/data/eQTLGen"
+out_dir<-"/project2/xuanyao/jing/project/results/total_h2"
 
 ref<-read.csv(paste0(ref_dir, "/1-s2.0-S0002929720300124-mmc2.csv"),
               header = T, stringsAsFactors = F)
-chr21[,"gene_id"]<-unlist(lapply(chr21$gene, function(i){return(gene_info[which(gene_info$gene_name == i), "gene_id"])}))
-chr22[,"gene_id"]<-unlist(lapply(chr22$gene, function(i){return(gene_info[which(gene_info$gene_name == i), "gene_id"])}))
 
-chr21_subset<-chr21[chr21$gene_id%in%ref$GeneSymbol,]
-chr21_pLI<-lapply(chr21_subset$gene_id, function(i){ref[ref$GeneSymbol == i, "pLI"]})
-chr21_pLI[sapply(chr21_pLI, is.null)] <- NA
-chr21_subset[, "pLI"]<-unlist(chr21_pLI)
 
-chr22_subset<-chr22[chr22$gene_id%in%ref$GeneSymbol,]
-chr22_pLI<-lapply(chr22_subset$gene_id, function(i){ref[ref$GeneSymbol == i, "pLI"]})
-chr22_pLI[sapply(chr22_pLI, is.null)] <- NA
-chr22_subset[, "pLI"]<-unlist(chr22_pLI)
+h2_df_pLI<-lapply(h2_df$gene_id, function(i){
+  if(as.character(i) %in% ref$GeneSymbol){
+    return(ref[ref$GeneSymbol == as.character(i), "pLI"][1])
+  }else{
+    return(NA)
+  }
+})
 
-par(mfrow = c(1,2))
-plot(chr21_subset$total_h2, chr21_subset$pLI, main = "Chromosome 21",
-     xlab = "pLI scores", ylab = "total h2")
-plot(chr22_subset$total_h2, chr22_subset$pLI, main = "Chromosome 22",
-     xlab = "pLI scores", ylab = "total h2")
+
+h2_df[,"pLI"]<-unlist(h2_df_pLI)
+
+
+h2_df[, "pLI_bin"]<-cut_number(h2_df[,"pLI"], n = 20)
+
+
+
+plot(y = h2_df$h2, x = h2_df$pLI, main = "Estimated heritability vs. Conversation Scores",
+     xlab = "pLI scores", ylab = "Estimated h2")
+
+
+ggplot(h2_df[!is.na(h2_df$pLI),], aes(x=pLI_bin, y=h2) ) +
+    geom_boxplot(fill="#69b3a2") +
+    xlab("Conservation scores by bins") + 
+    ylab("Estimated h2") + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle("Estimated h2 against conversation scores divided into 20 bins")
+
 
 ```
+#### Observations:     
+1. The scatter plot shows that genes are either highly conserved or not conversed are enriched with low estimated h2. Genes with low pLI scores seem have a higher proportion with high estimated h2.      
+2. Again, the trend is not obvious when dividing conservation scores by bins.      
 
 
+4.**EDS scores and number of enhancers**   
 ```{r}
-get_columns<-function(colname){
-  cols<-lapply(gene_list$V1, function(i){
-      f<-read.table(paste0(output_dir, i), header = T)
-      return(f[, colname])
-  })
-  output<-do.call(cbind, cols)
-  return(data.frame(f$Category, output))
-}
-```
 
-```{r}
-#count number of reference SNPs in Category C
-annotations<-read.table("/project2/xuanyao/jing/reference/baseline/baseline.21.annot.gz", header = T)
-counts<-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))
-```
+h2_df[,"EDS"]<-unlist(lapply(h2_df$gene_id, function(i){
+  if(as.character(i) %in% ref$GeneSymbol){
+    return(ref[ref$GeneSymbol == as.character(i), "EDS"][1])
+  }else{
+    return(NA)
+  }
+}))
 
-### summarize results across genes
-#### Chromosome 21
-```{r echo = FALSE}
-output_dir<-"/home/jinggu/scratch-midway2/projects/gene_heritability/chr21/output/"
-gene_list<-read.table(paste0(output_dir, "all_genes.txt"), header = F)
-f<-read.table(paste0(output_dir, "N6AMT1_local_SNPs.results"), header = T)
-```
-* average per SNP heritability for category Cc across all genes 
-```{r}
-chr21_tau<-get_columns("Coefficient")
-chr21_avg_tau<-apply(chr21_tau[, -1], 1, sum)
-hist(chr21_avg_tau, main = "Average Tau_C across all genes")
-names(chr21_avg_tau)<-chr21_tau$f.Category
-```
-* total Heritability estimates
-```{r}
-total_h2<-sum(counts*chr21_avg_tau)
-total_h2
-```
-#### Chromosome 22
-```{r echo = FALSE}
-output_dir<-"/home/jinggu/scratch-midway2/projects/gene_heritability/chr22/output/"
-gene_list<-read.table(paste0(output_dir, "all_genes.txt"), header = F)
-f<-read.table(paste0(output_dir, "ZNF280B_local_SNPs.results"), header = T)
-```
+h2_df[, "EDS_bin"]<-cut_number(h2_df[,"EDS"], n = 20)
 
-```{r}
-#count number of reference SNPs in Category C
-annotations<-read.table("/project2/xuanyao/jing/reference/baseline/baseline.22.annot.gz", header = T)
-counts<-unlist(apply(annotations[, 5:length(names(annotations))], 2, sum))
-```
-* average per SNP heritability for category Cc across all genes 
-```{r}
-chr22_tau<-get_columns("Coefficient")
-chr22_avg_tau<-apply(chr22_tau[, -1], 1, sum)
-hist(chr22_avg_tau, main = "Average Tau_C across all genes")
-names(chr22_avg_tau)<-chr22_tau$f.Category
-head(chr22_avg_tau)
-```
-* total Heritability estimates
-```{r}
-total_h2<-sum(counts*chr22_avg_tau)
-total_h2
-```
+plot(y = h2_df$h2, x = h2_df$EDS, main = "Estimated heritability vs. EDS Scores",
+     xlab = "EDS scores", ylab = "Estimated h2")
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+ggplot(h2_df[!is.na(h2_df$EDS),], aes(x=EDS_bin, y=h2) ) +
+    geom_boxplot(fill="#69b3a2") +
+    xlab("EDS scores by bins") + 
+    ylab("Estimated h2") + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle("Estimated h2 against EDS scores divided into 20 bins")
+
+
+
+h2_df[,"num_enhancers"]<-unlist(lapply(h2_df$gene_id, function(i){
+  if(as.character(i) %in% ref$GeneSymbol){
+    return(ref[ref$GeneSymbol == as.character(i), "ActivityLinking_EnhancerNumber"][1])
+  }else{
+    return(NA)
+  }
+}))
+
+plot(y = h2_df$h2, x = h2_df$num_enhancers, main = "Estimated heritability vs. Activity_linking_enhancer_numbers",
+     xlab = "Enhancer numbers", ylab = "Estimated h2")
+
+h2_df[, "num_enhancers_bin"]<-cut_number(h2_df[,"num_enhancers"], n = 20)
+
+ggplot(h2_df[!is.na(h2_df$num_enhancers),], aes(x=num_enhancers_bin, y=h2) ) +
+    geom_boxplot(fill="#69b3a2") +
+    xlab("Number of enhancers by bins") + 
+    ylab("Estimated h2") + 
+    theme(axis.text.x = element_text(angle = 90, vjust = -0.5)) +
+    ggtitle("Estimated h2 against activity linking enhancer numbers divided into 20 bins")
+
+```
+#### Observations  
+1. The scatter plots of EDS scores and Enhancer numbers seem to be noisy to see the signal.    
+2. It is also hard to see the trend.   
+
